@@ -1,12 +1,14 @@
-import statistics as s
-from datetime import datetime, timedelta
-from colorama import Fore
-import matplotlib.pyplot as plt
+import os
 import numpy as np
-from data import im_date, ped, course, t_data, e_data
+import statistics as s
+import matplotlib.pyplot as plt
+
+from colorama import Fore
 from utils import col_txt
-from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
+from dateutil.relativedelta import relativedelta
+from data import im_date, ped, course, t_data, e_data
 
 def predict_drop(x, x1, y1, slope):
     result = int(slope * (x - x1) + y1)
@@ -43,6 +45,7 @@ def value_change(values: list, dates: list, log: str='', is_max: bool=True):
     log+=f'/{value_to_compare_round} (' + col_txt(color, f'{sign_prefix}{change}%') 
     log+=f' in {diff} days)'
     print(log)
+
 def is_this_good(previous_ped, course_date, follow_ped):
     course_date_format = course_date.strftime("%d/%m/%y")
     print(f'{course_date_format}:')
@@ -276,6 +279,7 @@ class export_function:
         try:
             is_continue=True
             while is_continue:
+                os.system('cls')
                 print('Plotting which?')
                 print('- course '+col_txt(Fore.BLACK, '(1)'))
                 print('- ped '+col_txt(Fore.BLACK, '(2)'))
