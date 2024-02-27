@@ -6,7 +6,7 @@ class im_date:
     val=datetime(day=18, month=2, year=2024)
 
 # commitment, sharing, lope
-t=[
+t_data=[
   [[9.5, 9.0, 9.5], datetime(day=6, month=1, year=2024)],
   [[8.5, 6.5, 7.0], datetime(day=27, month=1, year=2024)],
   [[7.5, 6.0, 6.0], datetime(day=29, month=1, year=2024)],
@@ -22,7 +22,8 @@ t=[
   [[10.0, 9.5, 9.5], datetime(day=20, month=2, year=2024)],
 ]
 # t data
-e=[
+
+e_data=[
   [[8.0, 8.5, 8.0], datetime(day=6, month=1, year=2024)],
   [[6.0, 7.0, 6.0], datetime(day=27, month=1, year=2024)],
   [[7.0, 6.5, 6.0], datetime(day=29, month=1, year=2024)],
@@ -55,12 +56,17 @@ ped=[
 # ped
 
 course=[
-  datetime(day=16, month=11, year=2023),
+  datetime(day=16, month=11, year=2023), # ??????
   datetime(day=27, month=12, year=2023),
   datetime(day=29, month=12, year=2023),
   datetime(day=1, month=1, year=2024),
   datetime(day=5, month=2, year=2024),
   datetime(day=18, month=2, year=2024),
   datetime(day=19, month=2, year=2024),
+  datetime(day=24, month=2, year=2024),
+  datetime(day=25, month=2, year=2024),
 ]
 # course
+
+pred_ped=datetime(day=14, month=3, year=2024)
+# pred

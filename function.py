@@ -310,18 +310,19 @@ class export_function:
                 if chosing == '1':
                     plt.figure(figsize=(10, 6))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
 
                 elif chosing == '2':
                     plt.figure(figsize=(10, 6))
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
         
                 elif chosing == '3':
                     plt.figure(figsize=(10, 6))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+
                     plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
             
                 elif chosing == '4':
@@ -332,7 +333,8 @@ class export_function:
 
                     plt.plot(change_date_list_t, change_mean_list_t, label = 'T data', marker='o', linestyle='-')
                     plt.plot(change_date_list_e, change_mean_list_e, label = 'E data', marker='o', linestyle='--')
-                    plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+
                     plt.title('T vs E')
 
                 else:
@@ -351,7 +353,7 @@ class export_function:
 
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
                     plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
 
                     title=''
