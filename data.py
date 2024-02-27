@@ -63,5 +63,10 @@ course=[
   datetime(day=5, month=2, year=2024),
   datetime(day=18, month=2, year=2024),
   datetime(day=19, month=2, year=2024),
+  datetime(day=24, month=2, year=2024),
+  datetime(day=25, month=2, year=2024),
 ]
 # course
+
+pred_ped=datetime(day=14, month=3, year=2024)
+# pred

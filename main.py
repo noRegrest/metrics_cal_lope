@@ -59,4 +59,4 @@ while is_continue:
 
     print(col_txt(Fore.BLACK, '\n=========\n'))
 
-    is_continue=True if input('Continue? (yes= 1)\n')=='1' else False
+    is_continue=True if input('Menu? (yes= 1)\n')=='1' else False

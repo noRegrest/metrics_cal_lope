@@ -8,7 +8,7 @@ from utils import col_txt
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
-from data import im_date, ped, course, t_data, e_data
+from data import im_date, ped, course, t_data, e_data, pred_ped
 
 def predict_drop(x, x1, y1, slope):
     result = int(slope * (x - x1) + y1)
@@ -214,6 +214,20 @@ class export_function:
             predict=date_list[-1]+timedelta(days=mean)
             pred_distance=(predict-today).days
             print(f'Next circle starts at: '+col_txt(Fore.LIGHTYELLOW_EX,f'{predict.strftime("%d/%m/%Y")}')+f' (in {pred_distance})')
+
+            text_to_find='# pred'
+            new_line=f'pred_ped=datetime(day={predict.day}, month={predict.month}, year={predict.year})\n'
+
+            with open('data.py', 'r') as file:
+                lines = file.readlines()
+            for i in range (0, len(lines)):
+                if text_to_find in lines[i]:
+                    lines.pop(i-1)
+                    lines.insert(i-1, new_line)
+                    break
+            with open('data.py', 'w') as file:
+                file.writelines(lines)
+
         except Exception as e:
             print(e)
 
@@ -243,7 +257,7 @@ class export_function:
 
                 new_line = f"  datetime(day={day}, month={month}, year={year}),\n"
             else:
-                old_data=t_data[-3:]
+                old_data=t_data[-3:] if text_to_find=='# t data' else e_data[-3:]
                 for data in old_data:
                     print(col_txt(Fore.BLACK, f'{data[1].strftime("%d/%m/%y")}: ' + col_txt(Fore.LIGHTBLACK_EX, f'{data[0]} ({round(s.mean(data[0]), 2)})')))
                 
@@ -279,7 +293,6 @@ class export_function:
         try:
             is_continue=True
             while is_continue:
-                os.system('cls')
                 print('Plotting which?')
                 print('- course '+col_txt(Fore.BLACK, '(1)'))
                 print('- ped '+col_txt(Fore.BLACK, '(2)'))
@@ -309,13 +322,13 @@ class export_function:
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
             
                 elif chosing == '4':
                     change_mean_list_t=[s.mean(item[0]) for item in t_data]
                     change_mean_list_e=[s.mean(item[0]) for item in e_data]
                     change_date_list_t = [item[1] for item in t_data]
                     change_date_list_e = [item[1] for item in e_data]
-
 
                     plt.plot(change_date_list_t, change_mean_list_t, label = 'T data', marker='o', linestyle='-')
                     plt.plot(change_date_list_e, change_mean_list_e, label = 'E data', marker='o', linestyle='--')
@@ -339,6 +352,7 @@ class export_function:
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot([datetime.now()], [1], label='Current Date', marker='*')
+                    plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
 
                     title=''
                     if is_plotting_data:
@@ -358,6 +372,8 @@ class export_function:
                 plt.show()
 
                 is_continue=True if input('\n---\nContinue plotting? (yes=1)\n') == '1' else False
+                os.system('cls')
+
         except Exception as e:
             print(e)
 
