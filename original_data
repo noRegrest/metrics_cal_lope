@@ -56,7 +56,7 @@ ped=[
 # ped
 
 course=[
-  datetime(day=16, month=11, year=2023), # ??????
+  datetime(day=16, month=12, year=2023), # ??????
   datetime(day=27, month=12, year=2023),
   datetime(day=29, month=12, year=2023),
   datetime(day=1, month=1, year=2024),
