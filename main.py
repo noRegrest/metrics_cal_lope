@@ -32,13 +32,13 @@ while is_continue:
     # ! Change percent calcu
     elif chosen == '5':
         is_predict=False
-        is_plot = True if input("Plotting? (yes= 1)\n")=='1' else False
+        is_skip_plot = False if input("Skip plotting? (yes= 1)\n")=='1' else  True
         
         print(col_txt(Fore.BLACK, '\n=========\n'))
-        f.change_percent_cal('T data', is_plot=is_plot)
+        f.change_percent_cal('T data', is_plot=is_skip_plot)
 
         print(col_txt(Fore.BLACK, '\n=========\n'))
-        f.change_percent_cal('E data', is_plot=is_plot)
+        f.change_percent_cal('E data', is_plot=is_skip_plot)
     
     # ! Insert new thing
     elif chosen == '6':

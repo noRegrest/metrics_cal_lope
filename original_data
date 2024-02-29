@@ -1,4 +1,12 @@
 from datetime import datetime
+
+
+b=4000
+gift=500
+save=500
+gas=500
+per=500
+elses=2000
 class im_date:
     first_date=datetime(day=3, month=11, year=2023)
     e_BD=datetime(day=20, month=8, year=2004)
@@ -20,6 +28,7 @@ t_data=[
   [[9.5, 9.0, 10.0], datetime(day=14, month=2, year=2024)],
   [[10.0, 9.0, 10.0], datetime(day=18, month=2, year=2024)],
   [[10.0, 9.5, 9.5], datetime(day=20, month=2, year=2024)],
+  [[9.5, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
 ]
 # t data
 
@@ -37,6 +46,7 @@ e_data=[
   [[9.5, 9.0, 9.5], datetime(day=14, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=18, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=20, month=2, year=2024)],
+  [[10.0, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
 ]
 # e data
 
@@ -56,7 +66,7 @@ ped=[
 # ped
 
 course=[
-  datetime(day=16, month=12, year=2023), # ??????
+  datetime(day=16, month=12, year=2023),
   datetime(day=27, month=12, year=2023),
   datetime(day=29, month=12, year=2023),
   datetime(day=1, month=1, year=2024),

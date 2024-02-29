@@ -183,7 +183,13 @@ class export_function:
             last_for_rel = relativedelta(now, im_date.first_date)
 
             print('Been for:'+col_txt(last_color,f' {last_for}')+' days')
-            print(col_txt(Fore.BLACK, f'{last_for_rel.years} years, {last_for_rel.months} months, {last_for_rel.days} days'))
+            
+            if last_for_rel.years>0:
+                text=f'{last_for_rel.years} years, {last_for_rel.months} months, {last_for_rel.days} days'
+            else:
+                text=f'{last_for_rel.months} months, {last_for_rel.days} days'
+
+            print(col_txt(Fore.BLACK, text))
             print('')
             print(f'Till e {e_y+1} BD: {is_near_e_BD} days ({round(to_e_BD/30, 1)})')
             print(f'Till t {t_y+1} BD: {is_near_t_BD} days ({round(to_t_BD/30, 1)})')
@@ -323,7 +329,7 @@ class export_function:
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
 
-                    plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
+                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*')
             
                 elif chosing == '4':
                     change_mean_list_t=[s.mean(item[0]) for item in t_data]
@@ -354,7 +360,8 @@ class export_function:
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
-                    plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
+                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*')
+                    # plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
 
                     title=''
                     if is_plotting_data:
