@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 b=4000
 gift=500
 save=500
@@ -9,10 +8,13 @@ per=500
 elses=2000
 class im_date:
     first_date=datetime(day=3, month=11, year=2023)
+    
+    val=datetime(day=18, month=2, year=2024)
     e_BD=datetime(day=20, month=8, year=2004)
     t_BD=datetime(day=14, month=5, year=2000)
-    val=datetime(day=18, month=2, year=2024)
-
+    
+    mama_e_BD=datetime(day=11, month=3, year=1975)
+    
 # commitment, sharing, lope
 t_data=[
   [[9.5, 9.0, 9.5], datetime(day=6, month=1, year=2024)],
@@ -29,6 +31,7 @@ t_data=[
   [[10.0, 9.0, 10.0], datetime(day=18, month=2, year=2024)],
   [[10.0, 9.5, 9.5], datetime(day=20, month=2, year=2024)],
   [[9.5, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
+  [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
 ]
 # t data
 
@@ -47,6 +50,7 @@ e_data=[
   [[10.0, 10.0, 10.0], datetime(day=18, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=20, month=2, year=2024)],
   [[10.0, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
+  [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
 ]
 # e data
 
@@ -75,6 +79,7 @@ course=[
   datetime(day=19, month=2, year=2024),
   datetime(day=24, month=2, year=2024),
   datetime(day=25, month=2, year=2024),
+  datetime(day=1, month=3, year=2024),
 ]
 # course
 

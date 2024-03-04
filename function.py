@@ -157,6 +157,15 @@ class export_function:
     def cal_date():
         try:
             now=datetime.now()
+            # 
+            # is_take_input=False if input('Input date? (Skip= 1)\n')=='1' else True
+            # print(col_txt(Fore.BLACK, '-----'))
+            # if is_take_input:
+            #     day=int(input("Day: "))
+            #     month=int(input("Month: "))
+            #     year=int(input("Year: "))
+            #     now=datetime(year, month, day)
+            # 
             last_for=(now-im_date.first_date).days
             last_color = Fore.GREEN if (last_for%100 ==0 or last_for%100==99 or last_for%100==98) else Fore.RESET
 
@@ -294,7 +303,7 @@ class export_function:
         except Exception as e:
             print(e)
 
-    # ! Plotting course
+    # ! Plotting stuffs
     def plot_stuffs(ped_date:list = ped, cours_date:list = course):
         try:
             is_continue=True
@@ -316,20 +325,20 @@ class export_function:
                 if chosing == '1':
                     plt.figure(figsize=(10, 6))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
 
                 elif chosing == '2':
                     plt.figure(figsize=(10, 6))
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
         
                 elif chosing == '3':
                     plt.figure(figsize=(10, 6))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
 
-                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*')
+                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
             
                 elif chosing == '4':
                     change_mean_list_t=[s.mean(item[0]) for item in t_data]
@@ -339,7 +348,7 @@ class export_function:
 
                     plt.plot(change_date_list_t, change_mean_list_t, label = 'T data', marker='o', linestyle='-')
                     plt.plot(change_date_list_e, change_mean_list_e, label = 'E data', marker='o', linestyle='--')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
 
                     plt.title('T vs E')
 
@@ -359,9 +368,8 @@ class export_function:
 
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X')
-                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*')
-                    # plt.plot([pred_ped], [len(ped_date)+1], label='Predict Ped', marker='*')
+                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
 
                     title=''
                     if is_plotting_data:
@@ -375,6 +383,7 @@ class export_function:
                 plt.xticks(rotation=45)
                 plt.legend()
                 plt.grid(True)
+                plt.autumn()
 
                 # Show plot
                 plt.tight_layout()
@@ -387,7 +396,7 @@ class export_function:
             print(e)
 
     # ! Evaluate course safety
-    def evaluate_safy():
+    def evaluate_safety():
         try:
             for each_time in course:
                 course_new=[[each_time, 1]]

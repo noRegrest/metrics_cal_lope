@@ -13,34 +13,34 @@ while is_continue:
     os.system('cls')
     print()
 
-    # ! Counting
+    # ? Counting
     if chosen == '1':
         f.cal_date()
 
-    # ! Circle
+    # ? Circle
     elif chosen == '2':
         f.pred_pe()
 
-    # ! Evaluate course safety
+    # ? Evaluate course safety
     elif chosen == '3':
-        f.evaluate_safy()
+        f.evaluate_safety()
 
-    # ! Plotting course
+    # ? Plotting course
     elif chosen == '4':
         f.plot_stuffs()
 
-    # ! Change percent calcu
+    # ? Change percent calcu
     elif chosen == '5':
         is_predict=False
-        is_skip_plot = False if input("Skip plotting? (yes= 1)\n")=='1' else  True
-        
+        # is_skip_plot = False if input("Skip plotting? (yes= 1)\n")=='1' else  True
+        is_skip_plot=False
         print(col_txt(Fore.BLACK, '\n=========\n'))
         f.change_percent_cal('T data', is_plot=is_skip_plot)
 
         print(col_txt(Fore.BLACK, '\n=========\n'))
         f.change_percent_cal('E data', is_plot=is_skip_plot)
     
-    # ! Insert new thing
+    # ? Insert new thing
     elif chosen == '6':
         input_user = input("Course/Ped/T data/E data?\n (1/2/3/4/0)\n")
         if input_user == '1':
@@ -52,7 +52,7 @@ while is_continue:
         if input_user == '4':
             f.insert_date('e data')
 
-    # ! Stop
+    # ? Stop
     else:
         is_continue=False
         continue
