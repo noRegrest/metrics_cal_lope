@@ -1,10 +1,12 @@
 import os
+import math
 import numpy as np
 import statistics as s
 import matplotlib.pyplot as plt
 
 from colorama import Fore
 from utils import col_txt
+from collections import Counter
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
@@ -48,19 +50,19 @@ def value_change(values: list, dates: list, log: str='', is_max: bool=True):
 
 def is_this_good(previous_ped, course_date, follow_ped):
     course_date_format = course_date.strftime("%d/%m/%y")
-    print(f'{course_date_format}:')
+    print(col_txt(Fore.BLACK,'-----\n')+f'{course_date_format}:')
 
     if previous_ped is not None:
         dif=(course_date-previous_ped).days+1
-        color = Fore.GREEN if dif >= 20 else Fore.RED
+        color = Fore.LIGHTGREEN_EX if dif >= 20 else Fore.LIGHTRED_EX
         ped_date_format=previous_ped.strftime("%d/%m/%y")
-        print(col_txt(color, f'(p) {ped_date_format}: ({dif})'))
+        print(col_txt(Fore.LIGHTBLACK_EX, ' (p) ') + col_txt(color, f'{ped_date_format}: ({dif})'))
 
     if follow_ped is not None:
         dif=(follow_ped-course_date).days
-        color = Fore.GREEN if dif <10 else Fore.RED
+        color = Fore.LIGHTGREEN_EX if dif <10 else Fore.LIGHTRED_EX
         ped_date_format=follow_ped.strftime("%d/%m/%y")
-        print(col_txt(color, f'(f) {ped_date_format}: ({dif})'))
+        print(col_txt(Fore.LIGHTBLACK_EX, ' (f) ') + col_txt(color, f'{ped_date_format}: ({dif})'))
         
 class export_function:
     # ! Change percent calcu
@@ -131,7 +133,7 @@ class export_function:
             # Plotting
             if is_plot==True:
                 plt.ioff()
-                plt.figure(figsize=(10, 6))  
+                plt.figure(figsize=(5, 3))  
                 plt.plot(list_date, list_mean, marker='o', color='blue', linestyle='-')  
                 last_x = list_date[-2:]
                 last_y = list_mean[-2:]
@@ -221,8 +223,7 @@ class export_function:
             if last_distance >= 20:
                 print(col_txt(Fore.GREEN, f'Day {last_distance}: ALL IN'))
 
-            distances = [date_list[i+1] - date_list[i] for i in range(len(date_list) - 1)]
-            distances = [distance.days for distance in distances]
+            distances = [(date_list[i+1] - date_list[i]).days for i in range(len(date_list) - 1)]
             mean=round(s.mean(distances), 2)
             print(f'Circle: {mean} days ' + col_txt(Fore.BLACK, f'{distances}'))
 
@@ -323,34 +324,69 @@ class export_function:
 
                 print(col_txt(Fore.BLACK, '\nPlotting...'))
                 if chosing == '1':
-                    plt.figure(figsize=(10, 6))
-                    plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    # plt.figure(figsize=(5, 3))
+                    # plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
+                    # plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    course_per_month = Counter((date.year, date.month) for date in course)
 
+                    month_years = sorted(course_per_month.keys())
+                    course_counts = [course_per_month[month_year] for month_year in month_years]
+
+                    plt.figure(figsize=(5, 3))
+                    plt.bar(range(len(month_years)), course_counts, color='skyblue', label='per month')
+                    plt.xlabel('Date')
+                    plt.ylabel('Index')
+                    plt.title('Courses data')
+                    plt.xticks(range(len(month_years)), [f'{date[1]}/{date[0]}' for date in month_years])
+                    plt.grid(axis='y', linestyle='--', alpha=0.7)
+                    
                 elif chosing == '2':
-                    plt.figure(figsize=(10, 6))
+                    x_date=datetime.now()
+                    x=[ped[-1], pred_ped]
+                    y=[len(ped), len(ped)+1]
+                    y_date = y[0] + (y[1] - y[0]) * ((x_date - x[0]).days / (x[1] - x[0]).days)
+ 
+                    plt.figure(figsize=(5, 3))
+                    plt.plot([x_date], [y_date], color='red', label='Today', marker='X' )
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
-        
+                    # plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
+                    plt.xlabel('Date')
+                    plt.ylabel('Index')
+                    plt.grid(True)
+                    plt.xticks(rotation=45)
+
                 elif chosing == '3':
-                    plt.figure(figsize=(10, 6))
+                    plt.figure(figsize=(5, 3))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([im_date.first_date, im_date.first_date], [0, 10], label='First', marker='D', color='purple', linestyle='-.')
 
                     plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
-            
+                    plt.xlabel('Date')
+                    plt.ylabel('Index')
+                    plt.grid(True)
+                    plt.xticks(rotation=45)
+
                 elif chosing == '4':
                     change_mean_list_t=[s.mean(item[0]) for item in t_data]
                     change_mean_list_e=[s.mean(item[0]) for item in e_data]
                     change_date_list_t = [item[1] for item in t_data]
                     change_date_list_e = [item[1] for item in e_data]
 
+                    smallest = min(change_mean_list_t+change_mean_list_e)
+                    smallest = math.floor(smallest)
+
                     plt.plot(change_date_list_t, change_mean_list_t, label = 'T data', marker='o', linestyle='-')
                     plt.plot(change_date_list_e, change_mean_list_e, label = 'E data', marker='o', linestyle='--')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([datetime.now(), datetime.now()], [smallest, 10], label='Current Date', marker='X', linestyle='-.')
 
                     plt.title('T vs E')
+                    plt.xlabel('Date')
+                    plt.ylabel('Index')                    
+                    plt.grid(True)
+                    plt.xticks(rotation=45)
 
                 else:
                     is_plotting_data= (chosing == '5' or chosing =='6')
@@ -361,15 +397,17 @@ class export_function:
                         change_mean_list = [s.mean(item[0]) for item in change_list]
                         change_mean_list_reshaped = np.array(change_mean_list).reshape(-1, 1)
 
-                        sc = MinMaxScaler(feature_range = (1, len(cours_date)+1))
+                        # sc = MinMaxScaler(feature_range = (1, len(cours_date)+1))
+                        sc = MinMaxScaler(feature_range = (1, 10))
                         change_mean_list_scaled=sc.fit_transform(change_mean_list_reshaped)
                         
-                    plt.figure(figsize=(10, 6))
+                    plt.figure(figsize=(5, 3))
 
                     plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([datetime.now(), datetime.now()], [1, 10], label='Current Date', marker='X', linestyle='-.')
                     plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
+                    plt.plot([im_date.first_date, im_date.first_date], [0, 10], label='First', marker='D', color='purple', linestyle='-.')
 
                     title=''
                     if is_plotting_data:
@@ -377,15 +415,13 @@ class export_function:
                         title = 'T data' if chosing == '5' else 'E data'
 
                     plt.title('Course Plot' + ' - ' + title)
+                    plt.xlabel('Date')
+                    plt.ylabel('Index')
+                    plt.grid(True)
+                    plt.xticks(rotation=45)
 
-                plt.xlabel('Date')
-                plt.ylabel('Index')
-                plt.xticks(rotation=45)
                 plt.legend()
-                plt.grid(True)
-                plt.autumn()
 
-                # Show plot
                 plt.tight_layout()
                 plt.show()
 
