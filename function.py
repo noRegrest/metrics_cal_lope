@@ -339,22 +339,28 @@ class export_function:
                     plt.title('Courses data')
                     plt.xticks(range(len(month_years)), [f'{date[1]}/{date[0]}' for date in month_years])
                     plt.grid(axis='y', linestyle='--', alpha=0.7)
+                    plt.title('1. Course Plot')
                     
                 elif chosing == '2':
                     x_date=datetime.now()
                     x=[ped[-1], pred_ped]
-                    y=[len(ped), len(ped)+1]
+                    y=[3, 4]
                     y_date = y[0] + (y[1] - y[0]) * ((x_date - x[0]).days / (x[1] - x[0]).days)
  
                     plt.figure(figsize=(5, 3))
                     plt.plot([x_date], [y_date], color='red', label='Today', marker='X' )
-                    plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    # plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
-                    plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
+                    plt.plot(ped_date[-3:], range(1, 3+1), label='Ped', marker='o')
+                    plt.plot([ped_date[-1], pred_ped], [3, 4], label='Predict Ped', marker='*', linestyle='--')
+
+                    # plt.plot([ped_date[-1]], [0], label='Ped', marker='o')
+                    # plt.plot([ped_date[-1], pred_ped], [0, 0], label='Predict Ped', marker='*', linestyle='--')
+                    # plt.plot([x_date], [0], color='red', label='Today', marker='X' )
+
                     plt.xlabel('Date')
                     plt.ylabel('Index')
                     plt.grid(True)
                     plt.xticks(rotation=45)
+                    plt.title('2. Ped Plot')
 
                 elif chosing == '3':
                     plt.figure(figsize=(5, 3))
@@ -368,6 +374,7 @@ class export_function:
                     plt.ylabel('Index')
                     plt.grid(True)
                     plt.xticks(rotation=45)
+                    plt.title('3. Course vs PED Plot')
 
                 elif chosing == '4':
                     change_mean_list_t=[s.mean(item[0]) for item in t_data]
@@ -382,7 +389,7 @@ class export_function:
                     plt.plot(change_date_list_e, change_mean_list_e, label = 'E data', marker='o', linestyle='--')
                     plt.plot([datetime.now(), datetime.now()], [smallest, 10], label='Current Date', marker='X', linestyle='-.')
 
-                    plt.title('T vs E')
+                    plt.title('4. T vs E')
                     plt.xlabel('Date')
                     plt.ylabel('Index')                    
                     plt.grid(True)
@@ -412,9 +419,9 @@ class export_function:
                     title=''
                     if is_plotting_data:
                         plt.plot(change_date_list, change_mean_list_scaled, label='T data' if chosing == '5' else 'E data', marker='o')
-                        title = 'T data' if chosing == '5' else 'E data'
-
-                    plt.title('Course Plot' + ' - ' + title)
+                        title = '5. Course Plot T data' if chosing == '5' else '6. Course Plot E data'
+                    
+                    plt.title(title)
                     plt.xlabel('Date')
                     plt.ylabel('Index')
                     plt.grid(True)
