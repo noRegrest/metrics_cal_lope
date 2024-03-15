@@ -82,6 +82,7 @@ course=[
   datetime(day=1, month=3, year=2024),
   datetime(day=7, month=3, year=2024),
   datetime(day=10, month=3, year=2024),
+  datetime(day=12, month=3, year=2024),
 ]
 # course
 

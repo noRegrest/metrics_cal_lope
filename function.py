@@ -229,7 +229,10 @@ class export_function:
 
             predict=date_list[-1]+timedelta(days=mean)
             pred_distance=(predict-today).days
-            print(f'Next circle starts at: '+col_txt(Fore.LIGHTYELLOW_EX,f'{predict.strftime("%d/%m/%Y")}')+f' (in {pred_distance})')
+            if pred_distance<=0:
+                print(f'Has it happen? '+col_txt(Fore.LIGHTYELLOW_EX, f'({predict.strftime("%d/%m/%Y")})')+ col_txt(Fore.BLACK, f' ({-pred_distance} days ago)'))
+            else:
+                print(f'Next circle starts at: '+col_txt(Fore.LIGHTYELLOW_EX,f'{predict.strftime("%d/%m/%Y")}')+f' (in {pred_distance})')
 
             text_to_find='# pred'
             new_line=f'pred_ped=datetime(day={predict.day}, month={predict.month}, year={predict.year})\n'
