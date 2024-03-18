@@ -60,7 +60,7 @@ def is_this_good(previous_ped, course_date, follow_ped):
 
     if follow_ped is not None:
         dif=(follow_ped-course_date).days
-        color = Fore.LIGHTGREEN_EX if dif <10 else Fore.LIGHTRED_EX
+        color = Fore.LIGHTGREEN_EX if dif <=10 else Fore.LIGHTRED_EX
         ped_date_format=follow_ped.strftime("%d/%m/%y")
         print(col_txt(Fore.LIGHTBLACK_EX, ' (f) ') + col_txt(color, f'{ped_date_format}: ({dif})'))
         
@@ -457,4 +457,38 @@ class export_function:
                         is_this_good(p, c, f)
         except Exception as e:
             print(e)
+
+    # ! Course per Ped
+    def course_per_ped():
+        ped_list = ped + [datetime.now()]
+        c_list = course
+
+        result_list=[]
+        circles=[]
+        values=[]
+
+        for i in range(len(ped_list)-1):
+            course_circle = [c_date for c_date in c_list if c_date >= ped_list[i] and c_date < ped_list[i+1]]
+            course_circle_count=len(course_circle)
+            result_list.append([ped_list[i], ped_list[i+1], course_circle_count])
+
+            values.append(course_circle_count)
+            circles.append(f'{ped_list[i].strftime("%m/%y")}')
+
+        for item in result_list:
+            previous_p=item[0].strftime("%d/%m/%y")
+            following_p=item[1].strftime("%d/%m/%y")
+            count=item[-1]
+            print(f'{previous_p} - {following_p}: {count}')
+
+        mean = s.mean([item[-1] for item in result_list])
+        print(f'AVG: {round(mean, 2)}')
+
+        plt.figure(figsize=(5, 3))
+        plt.bar(circles, values, color='skyblue')
+        plt.grid(axis='y', linestyle='--', alpha=0.7, which= 'both')
+        plt.xlabel('Month')
+        plt.ylabel('Count')
+        plt.title('Course / Ped')
+        plt.show()
 

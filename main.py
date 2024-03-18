@@ -8,7 +8,13 @@ is_continue=True
 while is_continue:
     os.system('cls')
 
-    chosen = (input(col_txt(Fore.BLACK,'Choose one, anything else to stop\n')+ '1. Counting ds\n2. Circle\n3. Safety\n4. Plotting stuffs\n5. Change percent calcu\n6. Insert'+Fore.BLACK+'\n=========\n'+Fore.RESET))
+    chosen = (input(col_txt(
+        Fore.BLACK,'Choose one, anything else to stop\n')
+                    + '1. Counting ds\n2. Circle\n3. Safety\n4. Plotting stuffs\n5. Change percent calcu\n6. Insert\n7. Course/Ped'
+                    +Fore.BLACK
+                    +'\n=========\n'
+                    +Fore.RESET))
+    
     print(col_txt(Fore.BLACK, '\n=========\n'))
     os.system('cls')
     print()
@@ -39,7 +45,7 @@ while is_continue:
 
         print(col_txt(Fore.BLACK, '\n=========\n'))
         f.change_percent_cal('E data', is_plot=is_skip_plot)
-    
+        
     # ? Insert new thing
     elif chosen == '6':
         input_user = input("Course/Ped/T data/E data?\n (1/2/3/4/0)\n")
@@ -51,6 +57,10 @@ while is_continue:
             f.insert_date('t data')
         if input_user == '4':
             f.insert_date('e data')
+    
+    # ? Course per Ped
+    elif chosen == '7':
+        f.course_per_ped()
 
     # ? Stop
     else:

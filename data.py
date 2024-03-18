@@ -32,6 +32,7 @@ t_data=[
   [[10.0, 9.5, 9.5], datetime(day=20, month=2, year=2024)],
   [[9.5, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
+  [[9.5, 9.5, 9.0], datetime(day=18, month=3, year=2024)],
 ]
 # t data
 
@@ -51,6 +52,7 @@ e_data=[
   [[10.0, 10.0, 10.0], datetime(day=20, month=2, year=2024)],
   [[10.0, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
+  [[10.0, 9.5, 10.0], datetime(day=18, month=3, year=2024)],
 ]
 # e data
 
@@ -66,6 +68,7 @@ ped=[
   datetime(day=18, month=12, year=2023),
   datetime(day=14, month=1, year=2024),
   datetime(day=14, month=2, year=2024),
+  datetime(day=17, month=3, year=2024),
 ]
 # ped
 
@@ -83,8 +86,9 @@ course=[
   datetime(day=7, month=3, year=2024),
   datetime(day=10, month=3, year=2024),
   datetime(day=12, month=3, year=2024),
+  datetime(day=16, month=3, year=2024),
 ]
 # course
 
-pred_ped=datetime(day=14, month=3, year=2024)
+pred_ped=datetime(day=15, month=4, year=2024)
 # pred
