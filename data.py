@@ -33,6 +33,7 @@ t_data=[
   [[9.5, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
   [[9.5, 9.5, 9.0], datetime(day=18, month=3, year=2024)],
+  [[9.0, 8.5, 9.0], datetime(day=19, month=3, year=2024)],
 ]
 # t data
 
@@ -53,6 +54,7 @@ e_data=[
   [[10.0, 9.0, 9.5], datetime(day=29, month=2, year=2024)],
   [[10.0, 10.0, 10.0], datetime(day=3, month=3, year=2024)],
   [[10.0, 9.5, 10.0], datetime(day=18, month=3, year=2024)],
+  [[9.5, 9.5, 9.0], datetime(day=19, month=3, year=2024)],
 ]
 # e data
 
@@ -89,6 +91,14 @@ course=[
   datetime(day=16, month=3, year=2024),
 ]
 # course
-
+# 14
 pred_ped=datetime(day=15, month=4, year=2024)
 # pred
+
+# date | quantity | 't' or 'e' or 'i'
+remains=[
+  [datetime(day=20, month=1, year=2024), 2501087, 't'],
+  [datetime(day=20, month=2, year=2024), 520804, 't'],
+  [datetime(day=20, month=3, year=2024), 200000, 'e'],
+  [datetime(day=20, month=4, year=2024), 274, 'i'],
+]

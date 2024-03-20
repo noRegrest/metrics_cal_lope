@@ -63,7 +63,12 @@ def is_this_good(previous_ped, course_date, follow_ped):
         color = Fore.LIGHTGREEN_EX if dif <=10 else Fore.LIGHTRED_EX
         ped_date_format=follow_ped.strftime("%d/%m/%y")
         print(col_txt(Fore.LIGHTBLACK_EX, ' (f) ') + col_txt(color, f'{ped_date_format}: ({dif})'))
-        
+
+def find_y(x1, x2, y1, y2, given_x):
+    m = (y2 - y1) / (x2 - x1)
+    b = y1 - m * x1
+    return m * given_x + b        
+
 class export_function:
     # ! Change percent calcu
     def change_percent_cal(title: str = None, is_plot: bool = False):
@@ -345,19 +350,18 @@ class export_function:
                     plt.title('1. Course Plot')
                     
                 elif chosing == '2':
-                    x_date=datetime.now()
-                    x=[ped[-1], pred_ped]
-                    y=[3, 4]
-                    y_date = y[0] + (y[1] - y[0]) * ((x_date - x[0]).days / (x[1] - x[0]).days)
- 
+                    x_now = datetime.now()
+                    y_now = find_y(ped[-1].timestamp(), pred_ped.timestamp(), 3, 4, x_now.timestamp())
+
+                    x_safe_day = pred_ped - timedelta(days=10)
+                    y_safe_day = find_y(ped_date[-1].timestamp(), pred_ped.timestamp(), 3, 4, x_safe_day.timestamp())
+
                     plt.figure(figsize=(5, 3))
-                    plt.plot([x_date], [y_date], color='red', label='Today', marker='X' )
                     plt.plot(ped_date[-3:], range(1, 3+1), label='Ped', marker='o')
                     plt.plot([ped_date[-1], pred_ped], [3, 4], label='Predict Ped', marker='*', linestyle='--')
 
-                    # plt.plot([ped_date[-1]], [0], label='Ped', marker='o')
-                    # plt.plot([ped_date[-1], pred_ped], [0, 0], label='Predict Ped', marker='*', linestyle='--')
-                    # plt.plot([x_date], [0], color='red', label='Today', marker='X' )
+                    plt.plot([x_now], [y_now], color='red', label='Today', marker='X' )
+                    plt.plot(x_safe_day, y_safe_day, 'g.')
 
                     plt.xlabel('Date')
                     plt.ylabel('Index')
@@ -492,3 +496,15 @@ class export_function:
         plt.title('Course / Ped')
         plt.show()
 
+    def course_count():
+        text_to_find = '# course'
+        new_line=f'# {len(course)}\n'
+        with open('data.py', 'r') as file:
+            lines = file.readlines()
+        for i in range (0, len(lines)):
+            if text_to_find in lines[i]:
+                lines.pop(i+1)
+                lines.insert(i+1, new_line)
+                break
+        with open('data.py', 'w') as file:
+            file.writelines(lines)

@@ -1,102 +1,68 @@
-from datetime import datetime
-import random
-from colorama import Fore
-from dateutil.relativedelta import relativedelta
-import time
-import os
-
-import os
-import math
-import numpy as np
-import statistics as s
 import matplotlib.pyplot as plt
-
-from colorama import Fore
-from utils import col_txt
-from collections import Counter
 from datetime import datetime, timedelta
-from sklearn.preprocessing import MinMaxScaler
-from dateutil.relativedelta import relativedelta
 from data import im_date, ped, course, t_data, e_data, pred_ped
 
-'''
-# ! date minus
-first_day=int(input("Day: "))
-first_month=int(input("Month: "))
-first_year=int(input("Year: "))
-print('')
+def find_y(x1, x2, y1, y2, given_x):
+    m = (y2 - y1) / (x2 - x1)
+    b = y1 - m * x1
+    return m * given_x + b     
 
-second_day=int(input("Day: "))
-second_month=int(input("Month: "))
-second_year=int(input("Year: "))
-print('')
+def find_y_by_time(x1: datetime, x2: datetime, y1, y2, given_x: datetime):
+    return find_y(x1.timestamp(), x2.timestamp(), y1, y2, given_x.timestamp())
 
-first_date=datetime(first_year, first_month, first_day)
-second_date=datetime(second_year, second_month, second_day)
+skip_number=int(input('? nearest months\n'))
 
-diff=relativedelta(second_date, first_date)
-print('')
-print(f'The diff is:\n{diff.years} years, {diff.months} months, {diff.days} days\nor {(second_date-first_date).days} days')
-print('')
+if skip_number==0:
+    skip_number=len(ped)
 
-'''
+ped_date= ped[-skip_number:]
+course_date = [dates for dates in course if dates >= ped_date[0]]
 
-'''
-# ! random 
-print('Type in your option')
-options = [
-    'pho bo',
-    'bun bo',
-    'banh gio',
-    'bun ca',
-    'bun dau',
-    'bun rieu',
-    'pho ngan dem',
-]
-is_using_default_options=True if input('Default?')=='1' else False
+x_now = datetime.now()
+y_now = find_y_by_time(ped[-1], pred_ped, len(ped_date)-1, len(ped_date), x_now)
 
-if is_using_default_options == False:
-    options=[]
-
-while True:
-    option = input()
-    if option=='':
-        break
-    else:
-        options.append(option)
-
-random_number = random.randint(0, len(options)-1)
-print(options[random_number])
-'''
-
-ped_list = ped + [datetime.now()]
-c_list = course
-
-result_list=[]
-circles=[]
-values=[]
-
-for i in range(len(ped_list)-1):
-    course_circle = [c_date for c_date in c_list if c_date >= ped_list[i] and c_date < ped_list[i+1]]
-    course_circle_count=len(course_circle)
-    result_list.append([ped_list[i], ped_list[i+1], course_circle_count])
-
-    values.append(course_circle_count)
-    circles.append(f'{ped_list[i].strftime("%m/%y")}')
-
-for item in result_list:
-    previous_p=item[0].strftime("%d/%m/%y")
-    following_p=item[1].strftime("%d/%m/%y")
-    count=item[-1]
-    print(f'{previous_p} - {following_p}: {count}')
-
-mean = s.mean([item[-1] for item in result_list])
-print(f'AVG: {round(mean, 2)}')
+x_safe_day = pred_ped - timedelta(days=10)
+y_safe_day = find_y_by_time(ped_date[-1], pred_ped, len(ped_date)-1, len(ped_date), x_safe_day)
 
 plt.figure(figsize=(5, 3))
-plt.bar(circles, values, color='skyblue')
-plt.grid(axis='y', linestyle='--', alpha=0.7, which= 'both')
-plt.xlabel('Month')
-plt.ylabel('Count')
-plt.title('Course / Ped')
+plt.plot([ped_date[-1], pred_ped], [len(ped_date)-1, len(ped_date)], label='Predict Ped', marker='o', linestyle='--', color=('#6E6E6E'))
+plt.plot(ped_date, range(0, len(ped_date)), label='Ped', marker='o', color=('#6E6E6E'))
+plt.plot(x_safe_day, y_safe_day, 'go')
+plt.plot([x_now], [y_now], label='Today', marker='d', color='#1F77B4' )
+
+# ! course
+for  j in range(0, len(course_date)):
+    course_new=[[course_date[j], 1]]
+    ped_new=[[item, 0] for item in ped]
+    new_date_list = ped_new + course_new
+    new_date_list.sort(key=lambda x: x[0])
+
+    for i in range(0, len(new_date_list)):
+        if new_date_list[i][-1] == 1:
+            x1=new_date_list[i-1][0] if i != 0 else None
+            x_given=new_date_list[i][0]
+            x2=new_date_list[i+1][0] if i != len(new_date_list) - 1 else None
+
+            y1=ped_date.index(x1)
+
+            if x2 == None:
+                x2 = pred_ped
+                y2 = skip_number+1
+            else:
+                y2=ped_date.index(x2)
+            
+            y_to_find=find_y_by_time(x1, x2, y1, y2, x_given)
+            color = 'green' if (x2-x_given).days<=10 else 'red'
+            marker = 'v' # if (x2-x_given).days<=10 else 'd'
+            plt.plot(x_given, y_to_find, marker=marker, color=color)
+
+plt.xlabel('Date')
+plt.ylabel('Index')
+plt.grid(True)
+plt.xticks(rotation=45)
+plt.title('P/C')
+
+plt.legend()
+plt.tight_layout()
 plt.show()
+print('')

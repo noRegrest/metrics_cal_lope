@@ -45,7 +45,7 @@ while is_continue:
 
         print(col_txt(Fore.BLACK, '\n=========\n'))
         f.change_percent_cal('E data', is_plot=is_skip_plot)
-        
+
     # ? Insert new thing
     elif chosen == '6':
         input_user = input("Course/Ped/T data/E data?\n (1/2/3/4/0)\n")
@@ -70,3 +70,6 @@ while is_continue:
     print(col_txt(Fore.BLACK, '\n=========\n'))
 
     is_continue=True if input('Menu? (yes= 1)\n')=='1' else False
+
+os.system('cls')
+f.course_count()
