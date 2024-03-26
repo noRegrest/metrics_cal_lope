@@ -10,7 +10,25 @@ from collections import Counter
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
-from data import im_date, ped, course, t_data, e_data, pred_ped
+from data import im_date, ped, course, t_data, e_data, pred_ped, remains
+
+def get_total(source = 't'or 'e' or 'i' or None):
+    if source!=None:
+        return sum([m[1] for m in remains if m[2] == source ])
+    else:
+        return sum([m[1] for m in remains])
+    
+def get_values(source: str):
+    if source == '1':
+        
+        values = [t[1] for t in remains if t[3] == 't']
+    elif source == '2':
+        values = [t[1] for t in remains if t[3] == 'e']
+    elif source == '3':
+        values = [t[1] for t in remains if t[3] == 'i']
+    else:
+        values = [t[1] for t in remains]
+    return values
 
 def predict_drop(x, x1, y1, slope):
     result = int(slope * (x - x1) + y1)
@@ -67,9 +85,20 @@ def is_this_good(previous_ped, course_date, follow_ped):
 def find_y(x1, x2, y1, y2, given_x):
     m = (y2 - y1) / (x2 - x1)
     b = y1 - m * x1
-    return m * given_x + b        
+    return m * given_x + b     
 
-class export_function:
+def find_y_by_time(x1: datetime, x2: datetime, y1, y2, given_x: datetime):
+    return find_y(x1.timestamp(), x2.timestamp(), y1, y2, given_x.timestamp())    
+
+def number_to_ordinal(number):
+    number = int(number)
+    if 10 <= number % 100 <= 20:
+        suffix = 'th'
+    else:
+        suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(number % 10, 'th')
+    return str(number) + suffix
+
+class soft_function:
     # ! Change percent calcu
     def change_percent_cal(title: str = None, is_plot: bool = False):
         start_date=datetime.now()
@@ -197,6 +226,13 @@ class export_function:
             is_near_t_BD=col_txt(Fore.GREEN, f'{to_t_BD}') if to_t_BD <= 30 else f'{to_t_BD}'
 
             last_for_rel = relativedelta(now, im_date.first_date)
+          
+            next_uni = datetime(now.year, now.month, 3)
+            if next_uni <= now:
+                next_uni += relativedelta(months=1)
+
+            uni_count=relativedelta(next_uni, im_date.first_date).months
+            distance=(next_uni-now).days
 
             print('Been for:'+col_txt(last_color,f' {last_for}')+' days')
             
@@ -206,6 +242,8 @@ class export_function:
                 text=f'{last_for_rel.months} months, {last_for_rel.days} days'
 
             print(col_txt(Fore.BLACK, text))
+            print(col_txt(Fore.BLACK, f'The {number_to_ordinal(uni_count)} uni at {next_uni.strftime("%d/%m/%y")} ({distance} days)'))
+            
             print('')
             print(f'Till e {e_y+1} BD: {is_near_e_BD} days ({round(to_e_BD/30, 1)})')
             print(f'Till t {t_y+1} BD: {is_near_t_BD} days ({round(to_t_BD/30, 1)})')
@@ -230,14 +268,19 @@ class export_function:
 
             distances = [(date_list[i+1] - date_list[i]).days for i in range(len(date_list) - 1)]
             mean=round(s.mean(distances), 2)
-            print(f'Circle: {mean} days ' + col_txt(Fore.BLACK, f'{distances}'))
+            print(f'C: {mean} days ' + col_txt(Fore.BLACK, f'{distances}'))
 
             predict=date_list[-1]+timedelta(days=mean)
             pred_distance=(predict-today).days
+
+            predict_sfa=predict-timedelta(days=10)
+            sfa_distance=(predict_sfa-today).days
+
             if pred_distance<=0:
                 print(f'Has it happen? '+col_txt(Fore.LIGHTYELLOW_EX, f'({predict.strftime("%d/%m/%Y")})')+ col_txt(Fore.BLACK, f' ({-pred_distance} days ago)'))
             else:
-                print(f'Next circle starts at: '+col_txt(Fore.LIGHTYELLOW_EX,f'{predict.strftime("%d/%m/%Y")}')+f' (in {pred_distance})')
+                print(f'Next c starts at: '+col_txt(Fore.LIGHTYELLOW_EX,f'{predict.strftime("%d/%m/%Y")}')+f' (in {pred_distance})')
+                print(f'Nearest sfa: '+col_txt(Fore.BLACK,f'{predict_sfa.strftime("%d/%m/%Y")}')+f' (in {sfa_distance})')
 
             text_to_find='# pred'
             new_line=f'pred_ped=datetime(day={predict.day}, month={predict.month}, year={predict.year})\n'
@@ -351,17 +394,17 @@ class export_function:
                     
                 elif chosing == '2':
                     x_now = datetime.now()
-                    y_now = find_y(ped[-1].timestamp(), pred_ped.timestamp(), 3, 4, x_now.timestamp())
+                    y_now = find_y_by_time(ped[-1], pred_ped, 3, 4, x_now)
 
                     x_safe_day = pred_ped - timedelta(days=10)
-                    y_safe_day = find_y(ped_date[-1].timestamp(), pred_ped.timestamp(), 3, 4, x_safe_day.timestamp())
+                    y_safe_day = find_y_by_time(ped_date[-1], pred_ped, 3, 4, x_safe_day)
 
                     plt.figure(figsize=(5, 3))
                     plt.plot(ped_date[-3:], range(1, 3+1), label='Ped', marker='o')
                     plt.plot([ped_date[-1], pred_ped], [3, 4], label='Predict Ped', marker='*', linestyle='--')
 
                     plt.plot([x_now], [y_now], color='red', label='Today', marker='X' )
-                    plt.plot(x_safe_day, y_safe_day, 'g.')
+                    plt.plot([x_safe_day], [y_safe_day], color = 'green', label='safe', marker= '.')
 
                     plt.xlabel('Date')
                     plt.ylabel('Index')
@@ -370,12 +413,21 @@ class export_function:
                     plt.title('2. Ped Plot')
 
                 elif chosing == '3':
+                    y_now=find_y_by_time(ped_date[-1], pred_ped, len(ped_date), len(ped_date)+1, datetime.now())
+                    y_start=find_y_by_time(ped_date[0], ped_date[1], 1, 2, im_date.first_date)
+
                     plt.figure(figsize=(5, 3))
                     plt.plot(cours_date, range(1, len(cours_date)+1), label='Course', marker='o')
-                    plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
-                    plt.plot([datetime.now(), datetime.now()], [0, 10], label='Current Date', marker='X', linestyle='-.')
-                    plt.plot([im_date.first_date, im_date.first_date], [0, 10], label='First', marker='D', color='purple', linestyle='-.')
 
+                    for x in ped_date:
+                        plt.plot([x, x], [0, len(cours_date)+1], linestyle='--', color='gray')
+
+                    plt.plot([datetime.now(), datetime.now()], [0, len(cours_date)+1], linestyle='--', color='green')
+
+                    plt.plot(ped_date, range(1, len(ped_date)+1), label='Ped', marker='o')
+                    plt.plot([datetime.now()], [y_now], label='Current Date', marker='X', linestyle='-.')
+                    plt.plot([im_date.first_date], [y_start], label='First', marker='D', color='purple', linestyle='-.')
+                    
                     plt.plot([ped_date[-1], pred_ped], [len(ped_date), len(ped_date)+1], label='Predict Ped', marker='*', linestyle='--')
                     plt.xlabel('Date')
                     plt.ylabel('Index')
@@ -508,3 +560,67 @@ class export_function:
                 break
         with open('data.py', 'w') as file:
             file.writelines(lines)
+
+class hard_function:
+    
+    def source_summary():
+        is_chart=False if input("Skip Chart? (y=1)\n")=='1' else True
+        total=get_total(None)
+        con_t=get_total('t')
+        con_e=get_total('e')
+        con_i=get_total('i')
+
+        per_t = round(con_t*100/total, 2)
+        per_e = round(con_e*100/total, 2)
+        per_i = round(con_i*100/total, 2)
+
+        print(f'====\nTotal: \t{total:>12,}')
+        print(Fore.BLACK+f'T: \t{con_t:>12,} ({per_t}%)')
+        print(f'E: \t{con_e:>12,} ({per_e}%)')
+        print(f'I: \t{con_i:>12,} ({per_i}%)'+Fore.RESET)
+
+        if is_chart:
+            labels=[f'T', f'E', f'I']
+
+            plt.figure(figure=( 1.3, 1.4))
+            plt.pie([per_t, per_e, abs(100-per_t-per_e)],  labels=labels,explode=[0.05, 0.05, 0.2])
+            plt.legend()
+            plt.show()
+
+    def history():
+        # t_history=[t for t in remains if t[2] == 't']
+        # e_history=[t for t in remains if t[2] == 'e']
+        # i_history=[t for t in remains if t[2] == 'i']
+
+        # plt.figure(figsize=(5, 3))
+        # plt.plot([t[0] for t in t_history], [t[1] for t in t_history])
+        # plt.plot([t[0] for t in e_history], [t[1] for t in e_history])
+        # plt.plot([t[0] for t in i_history], [t[1] for t in i_history])
+        # plt.grid(axis='y', linestyle='--', alpha=0.7, which= 'both')
+
+        chosen_data = input('Which? (t/ e/ i/ all : 1/ 2/ 3/?)\n')
+        values=get_values(chosen_data)
+
+        time_periods = [t[0] for t in remains]
+        processed_values = [sum(values[:i+1]) for i in range(len(values))]
+
+        plt.figure(figsize=(5, 3))
+
+        # Plotting the cumulative growth over time
+        plt.plot(time_periods, processed_values, marker='o', linestyle='-')
+
+        # Filling the area below the line with a color
+        plt.fill_between(time_periods, processed_values, color='skyblue', alpha=0.4)
+
+        plt.xlabel('Date')
+        plt.ylabel('Index')
+        plt.grid(True)
+        plt.xticks(rotation=45)
+        plt.show()
+    
+    def _history():
+        for item in remains:
+            date=item[0].strftime("%d/%m/%y")
+            amount=f'{item[1]:,}'
+            source=str(item[2]).upper()
+            print(col_txt(Fore.BLACK, f'({date} - {source}): {amount}'))

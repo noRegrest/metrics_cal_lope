@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 from data import im_date, ped, course, t_data, e_data, pred_ped
 
-def find_y(x1, x2, y1, y2, given_x):
+'''def find_y(x1, x2, y1, y2, given_x):
     m = (y2 - y1) / (x2 - x1)
     b = y1 - m * x1
     return m * given_x + b     
@@ -65,4 +65,8 @@ plt.title('P/C')
 plt.legend()
 plt.tight_layout()
 plt.show()
-print('')
+# print('')'''
+
+# from function import hard_function as hf
+# # hf._history()
+# hf.source_summary()
