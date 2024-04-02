@@ -67,6 +67,6 @@ plt.tight_layout()
 plt.show()
 # print('')'''
 
-# from function import hard_function as hf
-# # hf._history()
-# hf.source_summary()
+from function import hard_function as hf
+# hf._history()
+hf.source_summary()

@@ -94,9 +94,10 @@ course=[
   datetime(day=12, month=3, year=2024),
   datetime(day=16, month=3, year=2024),
   datetime(day=24, month=3, year=2024),
+  datetime(day=29, month=3, year=2024),
 ]
 # course
-# 15
+# 16
 
 pred_ped=datetime(day=15, month=4, year=2024)
 # pred
@@ -109,9 +110,20 @@ remains=[
   [datetime(day=20, month=3, year=2024), 274, 'i'],
   [datetime(day=21, month=3, year=2024), 352, 'i'],
   [datetime(day=22, month=3, year=2024), 352, 'i'],
-  [datetime(day=24, month=3, year=2024), 704, 'i'],
+  [datetime(day=23, month=3, year=2024), 352, 'i'],
+  [datetime(day=24, month=3, year=2024), 352, 'i'],
   [datetime(day=25, month=3, year=2024), 352, 'i'],
   [datetime(day=26, month=3, year=2024), 352, 'i'],
+  [datetime(day=27, month=3, year=2024), 352, 'i'],
+  [datetime(day=28, month=3, year=2024), 352, 'i'],
+  [datetime(day=29, month=3, year=2024), 353, 'i'],
+  [datetime(day=29, month=3, year=2024), 30000, 'e'],
+  [datetime(day=30, month=3, year=2024), 353, 'i'],
+  [datetime(day=31, month=3, year=2024), 353, 'i'],
+  [datetime(day=31, month=3, year=2024), 50000, 'e'],
+  [datetime(day=1, month=4, year=2024), 353, 'i'],
+  [datetime(day=1, month=4, year=2024), 50000, 'e'],
+  [datetime(day=2, month=4, year=2024), 362, 'i'],
   # [datetime(day=24, month=3, year=2024), 30000, 'e'],
 
 ]

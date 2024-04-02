@@ -1,0 +1,26 @@
+Ideas Summary:
+====
+Basic feature:
+- Counting days (input start date, relationship milstones, birthday )
+- Milestone notification: ask users to take a photo at the moment; 
+ouput a photo of them with the milestone named,...
+- Noti when The Date is coming close (like 14/2, 08/03,...)
+
+
+====
+Exclusive features
+- Miss you: when I think of you, I press the miss you button, you receive a noti then you suppose to press on that miss you button as a reply to me.
+- Sharing to do list: to organize activities and responsibilities
+- Diary of small things: write things in the day that you want to share to the other,
+can setup a timer, when the time is running out, the other half can see what was on your mind
+- Random spinner (for decision any thing)
+- I'm here!: Share my location with the love one for a short time
+- Quiz: once a day, couple can create quiz to challenge each other (multiple  selections kind of quest)
+- Photo together atm: let see what the other half is doing?
+
+- Love Quotes
+- Messaging
+- Popular login method: by fb/ gg/ email/ phone number
+- Offline Access
+- Data privacy
+- Virtual Gift: (how to make this a great thing)

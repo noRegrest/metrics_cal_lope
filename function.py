@@ -232,7 +232,7 @@ class soft_function:
                 next_uni += relativedelta(months=1)
 
             uni_count=relativedelta(next_uni, im_date.first_date).months
-            distance=(next_uni-now).days
+            distance=(next_uni-now).days+1
 
             print('Been for:'+col_txt(last_color,f' {last_for}')+' days')
             
@@ -564,7 +564,8 @@ class soft_function:
 class hard_function:
     
     def source_summary():
-        is_chart=False if input("Skip Chart? (y=1)\n")=='1' else True
+        # is_chart=False if input("Skip Chart? (y=1)\n")=='1' else True
+        is_chart=False
         total=get_total(None)
         con_t=get_total('t')
         con_e=get_total('e')
