@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
-from data import im_date, ped, course, t_data, e_data, pred_ped
+from data import im_date, ped, course, t_data, e_data, pred_ped, remains
 
 '''def find_y(x1, x2, y1, y2, given_x):
     m = (y2 - y1) / (x2 - x1)
@@ -67,6 +67,32 @@ plt.tight_layout()
 plt.show()
 # print('')'''
 
+
+
+remains=[
+  [datetime(day=18, month=2, year=2024), 200000, 't'],
+  [datetime(day=19, month=2, year=2024), 200000,'t'],
+  [datetime(day=20, month=2, year=2024), 200000,'i'],
+  [datetime(day=19, month=2, year=2024), 200000,'e'],
+
+  [datetime(day=20, month=3, year=2024), 200000, 't'],
+  [datetime(day=22, month=3, year=2024), 200000, 'i'],
+  [datetime(day=29, month=3, year=2024), 200000,'e'],
+  [datetime(day=31, month=3, year=2024), 200000,'e'],
+
+
+  [datetime(day=21, month=4, year=2024), 200000,   't'],
+  [datetime(day=1, month=4, year=2024),  200000,  'e'],
+  [datetime(day=21, month=4, year=2024), 200000,  'i'],
+  [datetime(day=23, month=4, year=2024), 200000,  'i'],
+]
+
 from function import hard_function as hf
 # hf._history()
+# hf.source_summary()
+# hf.history()
 hf.source_summary()
+# hf.total_amount_monthly(remains)
+# hf.amount_each_month(None)
+
+# =====================================

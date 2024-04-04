@@ -5,18 +5,28 @@ import statistics as s
 import matplotlib.pyplot as plt
 
 from colorama import Fore
+import pandas as pd
 from utils import col_txt
 from collections import Counter
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
-from data import im_date, ped, course, t_data, e_data, pred_ped, remains
+from data import im_date, ped, course, t_data, e_data, pred_ped, remains, save_goal
 
-def get_total(source = 't'or 'e' or 'i' or None):
+def get_total(source = 't'or 'e' or 'i' or None, is_q: bool = False):
     if source!=None:
-        return sum([m[1] for m in remains if m[2] == source ])
+        if is_q:
+            return sum([m[1] for m in remains if m[2] == source if m[3]!='p'])
+        else:
+            return sum([m[1] for m in remains if m[2] == source ])
     else:
-        return sum([m[1] for m in remains])
+        if is_q:
+            return sum([m[1] for m in remains if m[3]!='p'])
+        else:
+            return sum([m[1] for m in remains])
+
+def get_crochet_total():
+    return sum([m[1] for m in remains if m[2] == 'e' and m[3] == 'c'])
     
 def get_values(source: str):
     if source == '1':
@@ -570,15 +580,34 @@ class hard_function:
         con_t=get_total('t')
         con_e=get_total('e')
         con_i=get_total('i')
+        con_c=get_crochet_total()
 
         per_t = round(con_t*100/total, 2)
         per_e = round(con_e*100/total, 2)
         per_i = round(con_i*100/total, 2)
+        per_c = round(con_c*100/total, 2)
 
-        print(f'====\nTotal: \t{total:>12,}')
-        print(Fore.BLACK+f'T: \t{con_t:>12,} ({per_t}%)')
+        print(f'====\nTTT: \t{total:>12,}')
+        print(Fore.BLACK+f'A: \t{con_t:>12,} ({per_t}%)')
         print(f'E: \t{con_e:>12,} ({per_e}%)')
-        print(f'I: \t{con_i:>12,} ({per_i}%)'+Fore.RESET)
+        print(f'I: \t{con_i:>12,} ({per_i}%)')
+        print('---')
+        print(f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
+
+        #======================================
+        total_q=get_total(None, True)
+        con_t=get_total('t', True)
+        per_t = round(con_t*100/total_q, 2)
+        per_e = round(con_e*100/total_q, 2)
+        per_i = round(con_i*100/total_q, 2)
+        per_c = round(con_c*100/total_q, 2)
+
+        print(f'====\nQ: \t{total_q:>12,}')
+        print(Fore.BLACK+f'A: \t{con_t:>12,} ({per_t}%)')
+        print(f'E: \t{con_e:>12,} ({per_e}%)')
+        print(f'I: \t{con_i:>12,} ({per_i}%)')
+        print('---')
+        print(f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
 
         if is_chart:
             labels=[f'T', f'E', f'I']
@@ -601,7 +630,6 @@ class hard_function:
 
         chosen_data = input('Which? (t/ e/ i/ all : 1/ 2/ 3/?)\n')
         values=get_values(chosen_data)
-
         time_periods = [t[0] for t in remains]
         processed_values = [sum(values[:i+1]) for i in range(len(values))]
 
@@ -609,6 +637,7 @@ class hard_function:
 
         # Plotting the cumulative growth over time
         plt.plot(time_periods, processed_values, marker='o', linestyle='-')
+        plt.plot([time_periods[-1]] ,[save_goal])
 
         # Filling the area below the line with a color
         plt.fill_between(time_periods, processed_values, color='skyblue', alpha=0.4)
@@ -620,8 +649,90 @@ class hard_function:
         plt.show()
     
     def _history():
-        for item in remains:
+        histoies=sorted(remains, key=lambda x: x[0])
+        for item in histoies:
             date=item[0].strftime("%d/%m/%y")
             amount=f'{item[1]:,}'
-            source=str(item[2]).upper()
+            name=str(item[2]).upper()
+            color=Fore.LIGHTGREEN_EX
+            if name == 'T':
+                color=Fore.LIGHTWHITE_EX
+            if name == 'E':
+                color=Fore.LIGHTYELLOW_EX
+            
+            source=name
+            # source=col_txt(color, name)+Fore.BLACK
+            date=col_txt(color, date)+Fore.BLACK
+
             print(col_txt(Fore.BLACK, f'({date} - {source}): {amount}'))
+
+    def total_amount_monthly(histories):
+        if histories == None:
+            histories = remains
+
+        # ! Plotting change monthly
+        # Sample data
+        data = histories
+        data.sort(key= lambda x: x[0])
+
+        # Convert data to DataFrame
+        df = pd.DataFrame(data, columns=['Date', 'Amount', 'Source'])
+
+        # Convert 'Date' column to datetime
+        df['Date'] = pd.to_datetime(df['Date'])
+
+        # Extract month from 'Date'
+        df['Month'] = df['Date'].dt.to_period('M')
+        df['Total Cumulative Sum'] = df.groupby('Month')['Amount'].cumsum()
+
+        # Group data by 'Month' and 'Source', then calculate cumulative sum
+        monthly_sum = df.groupby(['Month', 'Source'])['Amount'].sum().groupby(level=1).cumsum()
+
+        # Pivot the table to have 'i', 'e', and 't' as columns
+        pivot_table = monthly_sum.reset_index().pivot(index='Month', columns='Source', values='Amount').fillna(0)
+        print(pivot_table.shape)
+
+        # Plot stacked column chart
+        pivot_table.plot(kind='bar', stacked=True, figsize=(5, 3))
+        plt.plot([-1, pivot_table.shape[0]+1] ,[save_goal,save_goal], linestyle='--')
+        plt.xlabel('Month')
+        plt.ylabel('Amount')
+        plt.title('Total amount monthly')
+        plt.legend(title='Source')
+        plt.xticks(rotation=0)
+        plt.show()
+
+    def amount_each_month(histories):
+        if histories == None:
+            histories = remains
+
+        # ! Plotting each month
+        # Sample data
+        data = histories
+        data.sort(key= lambda x: x[0])
+
+        # Convert data to DataFrame
+        df = pd.DataFrame(data, columns=['Date', 'Amount', 'Source'])
+
+        # Convert 'Date' column to datetime
+        df['Date'] = pd.to_datetime(df['Date'])
+
+        # Extract month from 'Date'
+        df['Month'] = df['Date'].dt.to_period('M')
+
+        # Group data by 'Month' and 'Source', then calculate the sum for each group
+        monthly_sum = df.groupby(['Month', 'Source'])['Amount'].sum()
+
+        # Pivot the table to have 'i', 'e', and 't' as columns
+        pivot_table = monthly_sum.unstack(fill_value=0)
+
+        # Plot stacked column chart
+        pivot_table.plot(kind='bar', stacked=True, figsize=(5, 3))
+        plt.plot([-1, pivot_table.shape[0]+1] ,[save_goal,save_goal], linestyle='--')
+
+        plt.xlabel('Month')
+        plt.ylabel('Amount')
+        plt.title('Amount each month')
+        plt.legend(title='Source')
+        plt.xticks(rotation=0)
+        plt.show()
