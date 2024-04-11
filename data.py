@@ -1,10 +1,12 @@
 from datetime import datetime
 
 b=4000
+
 gift=500
 save=500
 gas=500
 per=500
+
 elses=2000
 
 save_goal = 10e6
@@ -39,6 +41,9 @@ t_data=[
   [[9.0, 8.5, 9.0], datetime(day=19, month=3, year=2024)],
   [[9.0, 5.0, 8.5], datetime(day=23, month=3, year=2024)],
   [[10.0, 9.0, 9.5], datetime(day=24, month=3, year=2024)],
+  [[9.5, 8.5, 8.5], datetime(day=4, month=4, year=2024)],
+  [[9.5, 9.0, 8.5], datetime(day=5, month=4, year=2024)],
+  [[9.5, 9.5, 9.0], datetime(day=8, month=4, year=2024)],
 ]
 # t data
 
@@ -62,6 +67,9 @@ e_data=[
   [[9.5, 9.5, 9.0], datetime(day=19, month=3, year=2024)],
   [[8.0, 9.5, 8.5], datetime(day=23, month=3, year=2024)],
   [[10.0, 9.5, 10.0], datetime(day=24, month=3, year=2024)],
+  [[7.0, 8.0, 8.5], datetime(day=4, month=4, year=2024)],
+  [[8.0, 8.5, 8.5], datetime(day=5, month=4, year=2024)],
+  [[9.5, 9.0, 9.5], datetime(day=8, month=4, year=2024)],
 ]
 # e data
 
@@ -98,9 +106,12 @@ course=[
   datetime(day=16, month=3, year=2024),
   datetime(day=24, month=3, year=2024),
   datetime(day=29, month=3, year=2024),
+  datetime(day=6, month=4, year=2024),
+  datetime(day=7, month=4, year=2024),
+  datetime(day=9, month=4, year=2024),
 ]
 # course
-# 16
+# 19
 
 pred_ped=datetime(day=15, month=4, year=2024)
 # pred
@@ -115,24 +126,45 @@ remains=[
   [datetime(day=18, month=3, year=2024),  2501087, 't', 'p'],
   [datetime(day=19, month=3, year=2024),  520804,  't', 'm'],
   [datetime(day=19, month=3, year=2024),  200000,  'e', 'm'],
-  [datetime(day=20, month=3, year=2024),  274,     'i', ' '],
-  [datetime(day=21, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=22, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=23, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=24, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=25, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=26, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=27, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=28, month=3, year=2024),  352,     'i', ' '],
-  [datetime(day=29, month=3, year=2024),  353,     'i', ' '],
   [datetime(day=29, month=3, year=2024),  30000,   'e', 'c'],
-  [datetime(day=30, month=3, year=2024),  353,     'i', ' '],
-  [datetime(day=31, month=3, year=2024),  353,     'i', ' '],
   [datetime(day=31, month=3, year=2024),  50000,   'e', 'c'],
-  [datetime(day= 1, month=4, year=2024),  353,     'i', ' '],
   [datetime(day= 1, month=4, year=2024),  50000,   'e', 'c'],
-  [datetime(day= 2, month=4, year=2024),  362,     'i', ' '],
-  [datetime(day= 3, month=4, year=2024),  368,     'i', ' '],
   [datetime(day= 3, month=4, year=2024),  200000,  'e', 'm'],
-  [datetime(day= 4, month=4, year=2024),  368,     'i', ' '],
+  [datetime(day= 8, month=4, year=2024),  501000,  't', 'm'],
+  [datetime(day= 10, month=4, year=2024),  -500000,    'e', 'o'],
+  [datetime(day= 11, month=4, year=2024),  8845,    'i', ' '],
+
+]
+ 
+# how much, who, what for, how many people
+_history=[
+    [85, 'Bình', 'rau củ', 7],
+    [60, 'Vỹ', 'tim', 7],
+    [120, 'Bình', 'tôm', 7],
+    [30, 'Vỹ', 'rau', 7],
+    [80, 'Vỹ', 'xương', 7],
+    [120, 'Bình', 'kim chi, gia vị, thả lẩu', 7],
+    [54, 'Bình', 'thịt lợn', 7],
+    [260, 'Vỹ', 'thịt vịt', 7],
+    [151, 'Trang', 'bi a', 6],
+    [130, 'Đạt', 'bi a', 4],
+    # [102, 'Vỹ', 'kem, nước ngọt, đá', 7],
+    [42, 'Vỹ', 'kem, nước ngọt, đá', 7],
+    [155, 'Khương', 'bún trưa', 5],
+]
+
+history=[
+    [85, 'Vỹ', 'rau củ', 7],
+    [60, 'Vỹ', 'tim', 7],
+    [120, 'Vỹ', 'tôm', 7],
+    [30, 'Vỹ', 'rau', 7],
+    [80, 'Vỹ', 'xương', 7],
+    [120, 'Vỹ', 'kim chi, gia vị, thả lẩu', 7],
+    [54, 'Vỹ', 'thịt lợn', 7],
+    [260, 'Vỹ', 'thịt vịt', 7],
+    [151, 'Trang', 'bi a', 6],
+    [130, 'Đạt', 'bi a', 4],
+    # [102, 'Vỹ', 'kem, nước ngọt, đá', 7],
+    [42, 'Vỹ', 'kem, nước ngọt, đá', 7],
+    [155, 'Khương', 'bún trưa', 5],
 ]

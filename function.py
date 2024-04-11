@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from colorama import Fore
 import pandas as pd
-from utils import col_txt
+from utils import col_txt, logger
 from collections import Counter
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
@@ -193,7 +193,7 @@ class soft_function:
                 plt.show()
     
         except Exception as e:
-            print(e)
+            logger.error(e)
 
         end_date=datetime.now()
         if is_plot==False:
@@ -260,7 +260,7 @@ class soft_function:
             # dif = relativedelta(im_date.e_BD,im_date.t_BD)
             # print(col_txt(Fore.BLACK, f'Dif: {dif.years} years, {dif.months} months, {dif.days} days'))
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     # ! Circle
     def pred_pe():
@@ -294,19 +294,18 @@ class soft_function:
 
             text_to_find='# pred'
             new_line=f'pred_ped=datetime(day={predict.day}, month={predict.month}, year={predict.year})\n'
-
-            with open('data.py', 'r') as file:
+            with open('data.py', encoding='utf-8', mode='r') as file:
                 lines = file.readlines()
             for i in range (0, len(lines)):
                 if text_to_find in lines[i]:
                     lines.pop(i-1)
                     lines.insert(i-1, new_line)
                     break
-            with open('data.py', 'w') as file:
+            with open('data.py', encoding='utf-8', mode='w') as file:
                 file.writelines(lines)
 
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     # ! Insert new thing
     def insert_date(select: str=''):
@@ -350,20 +349,20 @@ class soft_function:
 
             is_save=True if input('You really want to save? (yes=1)\n') == '1' else False
             if is_save==True:
-                with open('data.py', 'r') as file:
+                with open('data.py', encoding='utf-8', mode='r') as file:
                     lines = file.readlines()
                 for i in range (0, len(lines)):
                     if text_to_find in lines[i]:
                         lines.insert(i-1, new_line)
                         break
-                with open('data.py', 'w') as file:
+                with open('data.py', encoding='utf-8', mode='w') as file:
                     file.writelines(lines)
                 print(col_txt(Fore.GREEN,'Done'))
             else:
                 print(col_txt(Fore.GREEN, 'Stopped'))
 
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     # ! Plotting stuffs
     def plot_stuffs(ped_date:list = ped, cours_date:list = course):
@@ -505,7 +504,7 @@ class soft_function:
                 os.system('cls')
 
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     # ! Evaluate course safety
     def evaluate_safety():
@@ -522,7 +521,7 @@ class soft_function:
                         f=new_date_list[i+1][0] if i != len(new_date_list) - 1 else None
                         is_this_good(p, c, f)
         except Exception as e:
-            print(e)
+            logger.error(e)
 
     # ! Course per Ped
     def course_per_ped():
@@ -561,14 +560,14 @@ class soft_function:
     def course_count():
         text_to_find = '# course'
         new_line=f'# {len(course)}\n'
-        with open('data.py', 'r') as file:
+        with open('data.py', encoding='utf-8', mode='r') as file:
             lines = file.readlines()
         for i in range (0, len(lines)):
             if text_to_find in lines[i]:
                 lines.pop(i+1)
                 lines.insert(i+1, new_line)
                 break
-        with open('data.py', 'w') as file:
+        with open('data.py', encoding='utf-8', mode='w') as file:
             file.writelines(lines)
 
 class hard_function:
@@ -581,6 +580,7 @@ class hard_function:
         con_e=get_total('e')
         con_i=get_total('i')
         con_c=get_crochet_total()
+        con_t_p=remains[0][1]
 
         per_t = round(con_t*100/total, 2)
         per_e = round(con_e*100/total, 2)
@@ -588,13 +588,15 @@ class hard_function:
         per_c = round(con_c*100/total, 2)
 
         print(f'====\nTTT: \t{total:>12,}')
-        print(Fore.BLACK+f'A: \t{con_t:>12,} ({per_t}%)')
-        print(f'E: \t{con_e:>12,} ({per_e}%)')
-        print(f'I: \t{con_i:>12,} ({per_i}%)')
+        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK, f'({per_t}%)'))
+        print(Fore.BLACK+f'a:\t{con_t_p:>12,} (quyden)' + Fore.RESET)
+        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
+        print(f'I: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
         print('---')
-        print(f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
+        print(Fore.BLACK+f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
 
         #======================================
+
         total_q=get_total(None, True)
         con_t=get_total('t', True)
         per_t = round(con_t*100/total_q, 2)
@@ -603,11 +605,11 @@ class hard_function:
         per_c = round(con_c*100/total_q, 2)
 
         print(f'====\nQ: \t{total_q:>12,}')
-        print(Fore.BLACK+f'A: \t{con_t:>12,} ({per_t}%)')
-        print(f'E: \t{con_e:>12,} ({per_e}%)')
-        print(f'I: \t{con_i:>12,} ({per_i}%)')
+        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK,f'({per_t}%)'))
+        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK,f'({per_e}%)'))
+        print(f'I: \t{con_i:>12,} ' + col_txt(Fore.BLACK,f'({per_i}%)'))
         print('---')
-        print(f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
+        print(Fore.BLACK+f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
 
         if is_chart:
             labels=[f'T', f'E', f'I']
