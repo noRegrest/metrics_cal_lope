@@ -10,10 +10,17 @@ while is_continue:
 
     chosen = (input(col_txt(
         Fore.BLACK,'Choose one, anything else to stop\n')
-                    + '1. Counting ds\n2. Circle\n3. Safety\n4. Plotting stuffs\n5. Change percent calcu\n6. Insert\n7. Course/Ped'
-                    +Fore.BLACK
-                    +'\n=========\n'
-                    +Fore.RESET))
+                    + '1. Counting ds'
+                    + '\n2. Circle'
+                    + '\n3. Safety'
+                    + '\n4. Plotting stuffs'
+                    + '\n5. Change percent calcu'
+                    + '\n6. Insert'
+                    + '\n7. Course/Ped'
+                    + '\n8. Calendar'
+                    + Fore.BLACK
+                    + '\n=========\n'
+                    + Fore.RESET))
     
     print(col_txt(Fore.BLACK, '\n=========\n'))
     os.system('cls')
@@ -61,6 +68,10 @@ while is_continue:
     # ? Course per Ped
     elif chosen == '7':
         f.course_per_ped()
+
+    # ? Calendar
+    elif chosen == '8':
+        f.lun_date_convert()
 
     # ? Stop
     else:

@@ -67,32 +67,25 @@ plt.tight_layout()
 plt.show()
 # print('')'''
 
-
-
-remains=[
-  [datetime(day=18, month=2, year=2024), 200000, 't'],
-  [datetime(day=19, month=2, year=2024), 200000,'t'],
-  [datetime(day=20, month=2, year=2024), 200000,'i'],
-  [datetime(day=19, month=2, year=2024), 200000,'e'],
-
-  [datetime(day=20, month=3, year=2024), 200000, 't'],
-  [datetime(day=22, month=3, year=2024), 200000, 'i'],
-  [datetime(day=29, month=3, year=2024), 200000,'e'],
-  [datetime(day=31, month=3, year=2024), 200000,'e'],
-
-
-  [datetime(day=21, month=4, year=2024), 200000,   't'],
-  [datetime(day=1, month=4, year=2024),  200000,  'e'],
-  [datetime(day=21, month=4, year=2024), 200000,  'i'],
-  [datetime(day=23, month=4, year=2024), 200000,  'i'],
-]
-
 from function import hard_function as hf
 # hf._history()
-# hf.source_summary()
-# hf.history()
 hf.source_summary()
+# hf.history()
+# hf.source_summary()
 # hf.total_amount_monthly(remains)
 # hf.amount_each_month(None)
 
 # =====================================
+
+from lunarcalendar import Converter, Solar, Lunar, DateNotExist
+from colorama import Fore
+from function import sol_to_lu_dates
+
+# sol_to_lu_dates(course)
+# sol_to_lu_dates(ped)
+# for date in course:
+#     solar=Solar(date.year, date.month, date.day)
+#     lunar=Converter.Solar2Lunar(solar)
+#     lunar_color= Fore.LIGHTRED_EX if lunar.day==1 else Fore.RESET
+#     lunar_log=lunar_color+f'{lunar.day}/{lunar.month}/{lunar.year}'+Fore.RESET
+#     print(f'{solar.day}/{solar.month}/{solar.year} -> ' + lunar_log)

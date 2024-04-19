@@ -1,17 +1,32 @@
 import os
 import math
 import numpy as np
+import pandas as pd
 import statistics as s
 import matplotlib.pyplot as plt
 
 from colorama import Fore
-import pandas as pd
 from utils import col_txt, logger
 from collections import Counter
 from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
+from lunarcalendar import Converter, Solar, Lunar, DateNotExist
 from data import im_date, ped, course, t_data, e_data, pred_ped, remains, save_goal
+
+def sol_to_lu_date(date: datetime):
+    solar=Solar(date.year, date.month, date.day)
+    lunar=Converter.Solar2Lunar(solar)
+    return lunar
+
+def sol_to_lu_dates(list_date: list[datetime]):
+    for date in list_date:
+        solar=Solar(date.year, date.month, date.day)
+        lunar=Converter.Solar2Lunar(solar)
+        lunar_color= Fore.LIGHTGREEN_EX if lunar.day==1 else Fore.RESET
+        lunar_log=lunar_color+f'{lunar.day}/{lunar.month}/{lunar.year}'+Fore.RESET
+        print(f'{solar.day}/{solar.month}/{solar.year} -> ' + lunar_log)
+    print('===')
 
 def get_total(source = 't'or 'e' or 'i' or None, is_q: bool = False):
     if source!=None:
@@ -78,7 +93,11 @@ def value_change(values: list, dates: list, log: str='', is_max: bool=True):
 
 def is_this_good(previous_ped, course_date, follow_ped):
     course_date_format = course_date.strftime("%d/%m/%y")
-    print(col_txt(Fore.BLACK,'-----\n')+f'{course_date_format}:')
+    lunar_date=sol_to_lu_date(course_date)
+    lunar_date_format=f'{lunar_date.day}/{lunar_date.month}/{lunar_date.year}'
+    lunar_text=col_txt(Fore.LIGHTYELLOW_EX if lunar_date.day==1 else Fore.RESET, f'{lunar_date_format}')
+
+    print(col_txt(Fore.BLACK,'-----\n')+f'{course_date_format} - {lunar_text}:')
 
     if previous_ped is not None:
         dif=(course_date-previous_ped).days+1
@@ -259,6 +278,14 @@ class soft_function:
             print(f'Till t {t_y+1} BD: {is_near_t_BD} days ({round(to_t_BD/30, 1)})')
             # dif = relativedelta(im_date.e_BD,im_date.t_BD)
             # print(col_txt(Fore.BLACK, f'Dif: {dif.years} years, {dif.months} months, {dif.days} days'))
+            
+            
+            solar=Solar(now.year, now.month, now.day)
+            lunar=Converter.Solar2Lunar(solar)
+            lunar_color= Fore.LIGHTGREEN_EX if lunar.day==1 or lunar.day==15 else Fore.RESET
+            lunar_log=col_txt(lunar_color, f'{lunar.day}/{lunar.month}/{lunar.year}')
+            print(f'\nLunar day: ' + lunar_log)
+
         except Exception as e:
             logger.error(e)
 
@@ -569,6 +596,24 @@ class soft_function:
                 break
         with open('data.py', encoding='utf-8', mode='w') as file:
             file.writelines(lines)
+
+    def lun_date_convert():
+        u_inp=input('Sol to Lu / Lu to Sol / nvm (1, 2, ?)\n')
+        os.system('cls')
+        day=int(input("Day: "))
+        month=int(input("Month: "))
+        year=int(input("Year: "))
+        print('---')
+        if u_inp == '2':
+            lu=Lunar(year, month, day)
+            sol=Converter.Lunar2Solar(lu)
+            print(f'{sol.day}/{sol.month}/{sol.year}')
+
+        elif u_inp=='1':
+            sol=Solar(year, month, day)
+            lu=Converter.Solar2Lunar(sol)
+            print(f'{lu.day}/{lu.month}/{lu.year}')
+
 
 class hard_function:
     

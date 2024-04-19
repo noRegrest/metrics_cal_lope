@@ -44,6 +44,7 @@ t_data=[
   [[9.5, 8.5, 8.5], datetime(day=4, month=4, year=2024)],
   [[9.5, 9.0, 8.5], datetime(day=5, month=4, year=2024)],
   [[9.5, 9.5, 9.0], datetime(day=8, month=4, year=2024)],
+  [[9.0, 8.5, 8.5], datetime(day=19, month=4, year=2024)],
 ]
 # t data
 
@@ -70,6 +71,7 @@ e_data=[
   [[7.0, 8.0, 8.5], datetime(day=4, month=4, year=2024)],
   [[8.0, 8.5, 8.5], datetime(day=5, month=4, year=2024)],
   [[9.5, 9.0, 9.5], datetime(day=8, month=4, year=2024)],
+  [[8.5, 8.5, 8.0], datetime(day=19, month=4, year=2024)],
 ]
 # e data
 
@@ -131,13 +133,12 @@ remains=[
   [datetime(day= 1, month=4, year=2024),  50000,   'e', 'c'],
   [datetime(day= 3, month=4, year=2024),  200000,  'e', 'm'],
   [datetime(day= 8, month=4, year=2024),  501000,  't', 'm'],
-  [datetime(day= 10, month=4, year=2024),  -500000,    'e', 'o'],
-  [datetime(day= 11, month=4, year=2024),  8845,    'i', ' '],
+  [datetime(day=15, month=4, year=2024),  11101,   'i', ' '],
 
 ]
  
 # how much, who, what for, how many people
-_history=[
+history=[
     [85, 'Bình', 'rau củ', 7],
     [60, 'Vỹ', 'tim', 7],
     [120, 'Bình', 'tôm', 7],
@@ -153,7 +154,7 @@ _history=[
     [155, 'Khương', 'bún trưa', 5],
 ]
 
-history=[
+_history=[
     [85, 'Vỹ', 'rau củ', 7],
     [60, 'Vỹ', 'tim', 7],
     [120, 'Vỹ', 'tôm', 7],
