@@ -45,6 +45,7 @@ t_data=[
   [[9.5, 9.0, 8.5], datetime(day=5, month=4, year=2024)],
   [[9.5, 9.5, 9.0], datetime(day=8, month=4, year=2024)],
   [[9.0, 8.5, 8.5], datetime(day=19, month=4, year=2024)],
+  [[9.0, 8.5, 9.0], datetime(day=21, month=4, year=2024)],
 ]
 # t data
 
@@ -72,6 +73,7 @@ e_data=[
   [[8.0, 8.5, 8.5], datetime(day=5, month=4, year=2024)],
   [[9.5, 9.0, 9.5], datetime(day=8, month=4, year=2024)],
   [[8.5, 8.5, 8.0], datetime(day=19, month=4, year=2024)],
+  [[9.0, 9.0, 8.5], datetime(day=21, month=4, year=2024)],
 ]
 # e data
 
@@ -111,9 +113,10 @@ course=[
   datetime(day=6, month=4, year=2024),
   datetime(day=7, month=4, year=2024),
   datetime(day=9, month=4, year=2024),
+  datetime(day=20, month=4, year=2024),
 ]
 # course
-# 19
+# 20
 
 pred_ped=datetime(day=15, month=4, year=2024)
 # pred
@@ -133,7 +136,7 @@ remains=[
   [datetime(day= 1, month=4, year=2024),  50000,   'e', 'c'],
   [datetime(day= 3, month=4, year=2024),  200000,  'e', 'm'],
   [datetime(day= 8, month=4, year=2024),  501000,  't', 'm'],
-  [datetime(day=15, month=4, year=2024),  11101,   'i', ' '],
+  [datetime(day=22, month=4, year=2024),  15212,   'i', ' '],
 
 ]
  
