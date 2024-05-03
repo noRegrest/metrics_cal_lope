@@ -41,7 +41,7 @@ def get_total(source = 't'or 'e' or 'i' or None, is_q: bool = False):
             return sum([m[1] for m in remains])
 
 def get_crochet_total():
-    return sum([m[1] for m in remains if m[2] == 'e' and m[3] == 'c'])
+    return sum([m[1] for m in remains if m[2] == 'e' and m[3] == 'p'])
     
 def get_values(source: str):
     if source == '1':
@@ -264,13 +264,16 @@ class soft_function:
             distance=(next_uni-now).days+1
 
             print('Been for:'+col_txt(last_color,f' {last_for}')+' days')
-            
+            if last_for_rel.days==0:
+                is_the_day=Fore.LIGHTYELLOW_EX
+            else:
+                is_the_day=Fore.BLACK
             if last_for_rel.years>0:
                 text=f'{last_for_rel.years} years, {last_for_rel.months} months, {last_for_rel.days} days'
             else:
                 text=f'{last_for_rel.months} months, {last_for_rel.days} days'
 
-            print(col_txt(Fore.BLACK, text))
+            print(col_txt(is_the_day, text))
             print(col_txt(Fore.BLACK, f'The {number_to_ordinal(uni_count)} uni at {next_uni.strftime("%d/%m/%y")} ({distance} days)'))
             
             print('')
@@ -621,46 +624,37 @@ class hard_function:
         # is_chart=False if input("Skip Chart? (y=1)\n")=='1' else True
         is_chart=False
         total=get_total(None)
-        con_t=get_total('t')
-        con_e=get_total('e')
+        con_t=get_total('t', True)
+        con_e=get_total('e', True)
         con_i=get_total('i')
         con_c=get_crochet_total()
         con_t_p=remains[0][1]
 
         per_t = round(con_t*100/total, 2)
+        per_con_t_p = round(con_t_p*100/total, 2)
+
         per_e = round(con_e*100/total, 2)
-        per_i = round(con_i*100/total, 2)
         per_c = round(con_c*100/total, 2)
 
-        print(f'====\nTTT: \t{total:>12,}')
+        per_i = round(con_i*100/total, 2)
+
+        print(f'QuyDen:\t{con_t_p:>12,} '+ col_txt(Fore.BLACK, f'({per_con_t_p}%)'))
+        print(f'DanLen:\t{con_c:>12,} ' + col_txt(Fore.BLACK, f'({per_c}%)'))
+        print('---')
         print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK, f'({per_t}%)'))
-        print(Fore.BLACK+f'a:\t{con_t_p:>12,} (quyden)' + Fore.RESET)
         print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
-        print(f'I: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
-        print('---')
-        print(Fore.BLACK+f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
-
-        #======================================
-
-        total_q=get_total(None, True)
-        con_t=get_total('t', True)
-        per_t = round(con_t*100/total_q, 2)
-        per_e = round(con_e*100/total_q, 2)
-        per_i = round(con_i*100/total_q, 2)
-        per_c = round(con_c*100/total_q, 2)
-
-        print(f'====\nQ: \t{total_q:>12,}')
-        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK,f'({per_t}%)'))
-        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK,f'({per_e}%)'))
-        print(f'I: \t{con_i:>12,} ' + col_txt(Fore.BLACK,f'({per_i}%)'))
-        print('---')
-        print(Fore.BLACK+f'C: \t{con_c:>12,} ({per_c}%)'+Fore.RESET)
+        print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
+        print(f'====\nTong: \t{total:>12,}')
 
         if is_chart:
             labels=[f'T', f'E', f'I']
 
             plt.figure(figure=( 1.3, 1.4))
-            plt.pie([per_t, per_e, abs(100-per_t-per_e)],  labels=labels,explode=[0.05, 0.05, 0.2])
+            plt.pie([
+                per_t+per_con_t_p, 
+                per_e+per_c, 
+                abs(100- per_t-per_con_t_p-per_e-per_c)
+                ], labels=labels,explode=[0.05, 0.05, 0.05])
             plt.legend()
             plt.show()
 

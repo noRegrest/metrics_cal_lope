@@ -1,7 +1,7 @@
 import os
 from colorama import Fore
 from utils import col_txt
-from function import soft_function as f
+from function import soft_function as f, hard_function as hf
 
 is_continue=True
 
@@ -18,6 +18,7 @@ while is_continue:
                     + '\n6. Insert'
                     + '\n7. Course/Ped'
                     + '\n8. Calendar'
+                    + '\n9. Remains'
                     + Fore.BLACK
                     + '\n=========\n'
                     + Fore.RESET))
@@ -72,6 +73,10 @@ while is_continue:
     # ? Calendar
     elif chosen == '8':
         f.lun_date_convert()
+
+    # ? Remains
+    elif chosen == '9':
+        hf.source_summary()
 
     # ? Stop
     else:
