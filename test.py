@@ -69,7 +69,7 @@ plt.show()
 
 from function import hard_function as hf
 # hf._history()
-hf.source_summary()
+# hf.source_summary()
 # hf.history()
 # hf.source_summary()
 # hf.total_amount_monthly(remains)

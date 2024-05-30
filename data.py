@@ -137,7 +137,9 @@ remains=[
   [datetime(day= 1, month=4, year=2024),  50000,   'e', 'p'],
   [datetime(day= 3, month=4, year=2024),  200000,  'e', 'm'],
   [datetime(day= 8, month=4, year=2024),  501000,  't', 'm'],
-  [datetime(day=2, month=5, year=2024),  20245,   'i', ' '],
+  [datetime(day= 6, month=5, year=2024),  500000,  't', 'm'],
+  [datetime(day= 6, month=5, year=2024),  500000,  'e', 'm'],
+  [datetime(day= 28, month=5, year=2024),  38350,   'i', ' '],
 
 ]
  

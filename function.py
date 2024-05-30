@@ -585,7 +585,7 @@ class soft_function:
         plt.xlabel('Month')
         plt.ylabel('Count')
         plt.title('Course / Ped')
-        plt.show()
+        # plt.show()
 
     def course_count():
         text_to_find = '# course'
@@ -645,6 +645,7 @@ class hard_function:
         print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
         print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
         print(f'====\nTong: \t{total:>12,}')
+        print(col_txt(Fore.BLACK, f'====\nTong: \t{total}'))
 
         if is_chart:
             labels=[f'T', f'E', f'I']
