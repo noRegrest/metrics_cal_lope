@@ -790,16 +790,21 @@ class hard_function:
         plt.show()
     
     def findDDayThatIsFirstLunarDay():
+        # yearFrom = int(input('From Which Year? (number/0)\n'))
         yearLimit = int(input('To Which Year? (number/0)\n'))
         now=datetime.now()
         day_list=[]
-        if (yearLimit >= now.year):
-            for year in range(now.year, yearLimit+1):
-                for month in range(1, 13):
-                    solar_day = datetime(day=3, month=month, year=year)
-                    lunar_day = sol_to_lu_date(solar_day)
-                    lunar_day_format = datetime(day=lunar_day.day, month=lunar_day.month, year=lunar_day.year)
-                    if(lunar_day.day==1):
-                        day_list.append(f'{solar_day.strftime("%d/%m/%Y")} -> {col_txt(Fore.BLACK, lunar_day_format.strftime("%d/%m/%Y"))}')
-        for day in day_list:
-            print(day)
+        try:
+            if (yearLimit >= now.year):
+                for year in range(now.year, yearLimit+1):
+                # for year in range(yearFrom, yearLimit+1):
+                    for month in range(1, 13):
+                        solar_day = datetime(day=3, month=month, year=year)
+                        lunar_day = sol_to_lu_date(solar_day)
+                        if(lunar_day.day==1):
+                            lunar_day_format =f'{str(lunar_day.day).zfill(2)}/{str(lunar_day.month).zfill(2)}/{str(lunar_day.year%1000).zfill(2)} '
+                            day_list.append(f'{solar_day.strftime("%d/%m/%Y")} -> {col_txt(Fore.BLACK, lunar_day_format)}')
+            for day in day_list:
+                print(day)
+        except Exception as e:
+            logger.error(e)
