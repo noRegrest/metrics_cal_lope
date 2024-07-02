@@ -19,6 +19,7 @@ while is_continue:
                     + '\n7. Course/Ped'
                     + '\n8. Calendar'
                     + '\n9. Remains'
+                    + '\n10. Vegetable days'
                     + Fore.BLACK
                     + '\n=========\n'
                     + Fore.RESET))
@@ -77,6 +78,10 @@ while is_continue:
     # ? Remains
     elif chosen == '9':
         hf.source_summary()
+
+    # ? Vegetable days
+    elif chosen == '10':
+        hf.findDDayThatIsFirstLunarDay()
 
     # ? Stop
     else:

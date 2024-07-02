@@ -95,9 +95,9 @@ def is_this_good(previous_ped, course_date, follow_ped):
     course_date_format = course_date.strftime("%d/%m/%y")
     lunar_date=sol_to_lu_date(course_date)
     lunar_date_format=f'{lunar_date.day}/{lunar_date.month}/{lunar_date.year}'
-    lunar_text=col_txt(Fore.LIGHTYELLOW_EX if lunar_date.day==1 else Fore.RESET, f'{lunar_date_format}')
+    lunar_text=col_txt(Fore.LIGHTYELLOW_EX if lunar_date.day==1 else Fore.BLACK, f'[{lunar_date_format}]')
 
-    print(col_txt(Fore.BLACK,'-----\n')+f'{course_date_format} - {lunar_text}:')
+    print(col_txt(Fore.BLACK,'-----\n')+f'{course_date_format}  {lunar_text}:')
 
     if previous_ped is not None:
         dif=(course_date-previous_ped).days+1
@@ -646,6 +646,16 @@ class hard_function:
         print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
         print(f'====\nTong: \t{total:>12,}')
         print(col_txt(Fore.BLACK, f'====\nTong: \t{total}'))
+        print('\n---')
+
+        con_t=con_t_p+con_t
+        con_e=con_e+con_c
+        per_t=round(con_t*100/total, 2)
+        per_e = round(con_e*100/total, 2)
+
+        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK, f'({per_t}%)'))
+        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
+        print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
 
         if is_chart:
             labels=[f'T', f'E', f'I']
@@ -778,3 +788,18 @@ class hard_function:
         plt.legend(title='Source')
         plt.xticks(rotation=0)
         plt.show()
+    
+    def findDDayThatIsFirstLunarDay():
+        yearLimit = int(input('To Which Year? (number/0)\n'))
+        now=datetime.now()
+        day_list=[]
+        if (yearLimit >= now.year):
+            for year in range(now.year, yearLimit+1):
+                for month in range(1, 13):
+                    solar_day = datetime(day=3, month=month, year=year)
+                    lunar_day = sol_to_lu_date(solar_day)
+                    lunar_day_format = datetime(day=lunar_day.day, month=lunar_day.month, year=lunar_day.year)
+                    if(lunar_day.day==1):
+                        day_list.append(f'{solar_day.strftime("%d/%m/%Y")} -> {col_txt(Fore.BLACK, lunar_day_format.strftime("%d/%m/%Y"))}')
+        for day in day_list:
+            print(day)
