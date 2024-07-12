@@ -1,5 +1,6 @@
 import os
 from colorama import Fore
+from lunar import luanr
 from utils import col_txt
 from function import soft_function as f, hard_function as hf
 
@@ -20,6 +21,7 @@ while is_continue:
                     + '\n8. Calendar'
                     + '\n9. Remains'
                     + '\n10. Vegetable days'
+                    + '\n11. Lunar year'
                     + Fore.BLACK
                     + '\n=========\n'
                     + Fore.RESET))
@@ -83,6 +85,10 @@ while is_continue:
     elif chosen == '10':
         hf.findDDayThatIsFirstLunarDay()
 
+    # ? Lunar year
+    elif chosen == '11':
+        luanr()
+        
     # ? Stop
     else:
         is_continue=False

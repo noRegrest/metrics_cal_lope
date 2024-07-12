@@ -92,6 +92,7 @@ ped=[
   datetime(day=17, month=3, year=2024),
   datetime(day=3, month=5, year=2024),
   datetime(day=4, month=6, year=2024),
+  datetime(day=8, month=7, year=2024),
 ]
 # ped
 
@@ -124,7 +125,7 @@ course=[
 # course
 # 24
 
-pred_ped=datetime(day=6, month=7, year=2024)
+pred_ped=datetime(day=9, month=8, year=2024)
 # pred
 
 # date | amount | from_who | source
@@ -152,7 +153,10 @@ remains=[
   [datetime(day= 5, month=6, year=2024),  500000,  't', 'm'],
   [datetime(day= 5, month=6, year=2024),  500000,  'e', 'm'],
 
-  [datetime(day= 8, month=7, year=2024),  72388,   'i', ' '],
+  [datetime(day= 8, month=7, year=2024),  500000,  't', 'm'],
+  [datetime(day= 8, month=7, year=2024),  500000,  'e', 'm'],
+
+  [datetime(day= 8, month=7, year=2024),  72959,   'i', ' '],
 
 ]
  
