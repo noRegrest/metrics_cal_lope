@@ -2,34 +2,9 @@
 # Define dictionaries for lunar years and animals
 import os
 
+from colorama import Fore
 
-lunar = {
-    "canh": "Canh ",
-    "tan": "Tân ",
-    "nham": "Nhâm ",
-    "quy": "Quý ",
-    "giap": "Giáp ",
-    "at": "Ất ",
-    "binh": "Bính ",
-    "dinh": "Đinh ",
-    "mau": "Mậu ",
-    "ki": "Kỉ ",
-}
-
-animals = {
-    "tis": "Tí",
-    "suu": "Sửu",
-    "dan": "Dần",
-    "mao": "Mão",
-    "thin": "Thìn",
-    "tij": "Tị",
-    "ngo": "Ngọ",
-    "mui": "Mùi",
-    "than": "Thân",
-    "dau": "Dậu",
-    "tuat": "Tuất",
-    "hoi": "Hợi",
-}
+from utils import col_txt
 
 # Define lunar years in SCN and TCN orders
 lunarSCN = [
@@ -60,42 +35,42 @@ lunarTCN = [
 
 # Define lunar animals
 lunar_animals = [
-    {"name": animals["tis"], "value": 0},
-    {"name": animals["suu"], "value": 1},
-    {"name": animals["dan"], "value": 2},
-    {"name": animals["mao"], "value": 3},
-    {"name": animals["thin"], "value": 4},
-    {"name": animals["tij"], "value": 5},
-    {"name": animals["ngo"], "value": 6},
-    {"name": animals["mui"], "value": 7},
-    {"name": animals["than"], "value": 8},
-    {"name": animals["dau"], "value": 9},
-    {"name": animals["tuat"], "value": 10},
-    {"name": animals["hoi"], "value": 11},
+    {"name": "Tí", "value": 0},
+    {"name": "Sửu", "value": 1},
+    {"name": "Dần", "value": 2},
+    {"name": "Mão", "value": 3},
+    {"name": "Thìn", "value": 4},
+    {"name": "Tị", "value": 5},
+    {"name": "Ngọ", "value": 6},
+    {"name": "Mùi", "value": 7},
+    {"name": "Thân", "value": 8},
+    {"name": "Dậu", "value": 9},
+    {"name": "Tuất", "value": 10},
+    {"name": "Hợi", "value": 11},
 ]
 
 def find_lunar_positive(year):
     lunarValue = abs(year % 10)
-    lunarName = next(item["name"] for item in lunarSCN if item["value"] == lunarValue)
-    
     diff = abs(year - 1960)
     animalNumber = diff % 12
+
     if year < 1960:
         if animalNumber != 0:
             animalNumber = 12 - animalNumber
     
+    start = next(item["name"] for item in lunarSCN if item["value"] == lunarValue)
     end = next(item["name"] for item in lunar_animals if item["value"] == animalNumber)
-    return f"{lunarName} {end}"
+    return f"{start} {end}"
 
 def find_lunar_negative(year):
     yearP = abs(year)
     lunarValue = yearP % 10
-    start = next(item["name"] for item in lunarTCN if item["value"] == lunarValue)
-    
     animalNumber = 9 - yearP % 12
+
     if animalNumber < 0:
         animalNumber += 12
     
+    start = next(item["name"] for item in lunarTCN if item["value"] == lunarValue)
     end = next(item["name"] for item in lunar_animals if item["value"] == animalNumber)
     return f"{start} {end}"
 
@@ -120,35 +95,33 @@ def find_year_by_lunar(lunar_to_search, from_year=1800, to_year=2024):
             years.append(i)
     return {"search": lunar_to_search, "years": years}
 
-# Testing the functions
-# year= int(input('Year: '))
-# os.system('cls')
-
-# print(find_lunar_by_year(year))
-# Uncomment below lines to test other functions
-# print(find_lunar_by_years(1950, 2024))
-# print(find_year_by_lunar(lunar["quy"] + animals["mui"]))
-
 def luanr():
     is_continue=True
 
     while is_continue:
-        chosing=input('Year to Lunar or Find year by Lunar ( 1 / 2 / anything else )\n')
-        os.system('cls')
-        if (chosing == '1'):
-            year = int(input('Input year: '))
-            print('=> '+find_lunar_by_year(year)) 
+        try:  
+            chosing=input('Year to Lunar or Find year by Lunar ( 1 / 2 / anything else )\n')
+            os.system('cls')
+            if (chosing == '1'):
+                year = int(input('Input year: '))
+                print('=> '+find_lunar_by_year(year)) 
 
-        elif (chosing == '2'):
-            yearFrom = int(input('From which year? '))
-            yearTo = int(input('To which year? '))
-            search = input('What to find?\n')
-            result = find_year_by_lunar(search, yearFrom, yearTo)['years']
-            print(f'=> {result}') 
+            elif (chosing == '2'):
+                yearFrom = int(input('From which year? '))
+                yearTo = int(input('To which year? '))
+                search = input('What to find?')
+                result = find_year_by_lunar(search, yearFrom, yearTo)['years']
+                if search == '':
+                    for year in result:
+                        print(f'{year}' + ': ' +find_lunar_by_year(year)) 
+                else:
+                    print(f'=> {result}') 
 
-        else:
-            is_continue=False
-            continue
+            else:
+                is_continue=False
+                continue
 
-        is_continue=True if input('\n---\nContinue? (yes= 1)\n')=='1' else False
-        os.system('cls')
+            is_continue=True if input('\n---\nContinue? (yes= 1)\n')=='1' else False
+            os.system('cls')
+        except Exception as e:
+            print(col_txt(fore=Fore.RED,text =  f'{e}'))

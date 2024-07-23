@@ -1,8 +1,9 @@
 import os
 from colorama import Fore
-from lunar import luanr
+from services.consonant import toNH
+from services.lunar import luanr
 from utils import col_txt
-from function import soft_function as f, hard_function as hf
+from services.function import soft_function as f, hard_function as hf
 
 is_continue=True
 
@@ -22,6 +23,7 @@ while is_continue:
                     + '\n9. Remains'
                     + '\n10. Vegetable days'
                     + '\n11. Lunar year'
+                    + '\n12. Nhờn'
                     + Fore.BLACK
                     + '\n=========\n'
                     + Fore.RESET))
@@ -88,6 +90,10 @@ while is_continue:
     # ? Lunar year
     elif chosen == '11':
         luanr()
+
+    # ? to NH
+    elif chosen == '12':
+        toNH()
         
     # ? Stop
     else:
