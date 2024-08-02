@@ -24,6 +24,7 @@ while is_continue:
                     + '\n10. Vegetable days'
                     + '\n11. Lunar year'
                     + '\n12. Nhờn'
+                    + '\n13. FindFirstBoD'
                     + Fore.BLACK
                     + '\n=========\n'
                     + Fore.RESET))
@@ -85,7 +86,7 @@ while is_continue:
 
     # ? Vegetable days
     elif chosen == '10':
-        hf.findDDayThatIsFirstLunarDay()
+        hf.find_anni_date_that_is_first_of_lunar_month()
 
     # ? Lunar year
     elif chosen == '11':
@@ -94,6 +95,10 @@ while is_continue:
     # ? to NH
     elif chosen == '12':
         toNH()
+
+    # ? to NH
+    elif chosen == '13':
+        hf.find_dob_that_lunar_month_is_not_7()
         
     # ? Stop
     else:

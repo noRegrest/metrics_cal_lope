@@ -13,7 +13,7 @@ def toNH():
             text = input("Input: ")
 
             one_vowel_pattern = r'\b([aeiouyáàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ])'
-            pattern = r'\b(ch|nh|th|ph|kh|gh|ng|ngh|gi|qu|tr|b|c|d|đ|g|h|k|l|m|n|p|q|r|s|t|v|x|[aeiouyáàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ])'
+            pattern = r'\b(ch|nh|th|ph|kh|gh|ngh|ng|gi|qu|tr|b|c|d|đ|g|h|k|l|m|n|p|q|r|s|t|v|x)'
 
             def replace(match):
                 value = 'nh'+match.group(0)

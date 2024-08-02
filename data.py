@@ -121,9 +121,10 @@ course=[
   datetime(day=25, month=6, year=2024),
   datetime(day=27, month=6, year=2024),
   datetime(day=7, month=7, year=2024),
+  datetime(day=24, month=7, year=2024),
 ]
 # course
-# 24
+# 25
 
 pred_ped=datetime(day=9, month=8, year=2024)
 # pred
@@ -156,7 +157,7 @@ remains=[
   [datetime(day= 8, month=7, year=2024),  500000,  't', 'm'],
   [datetime(day= 8, month=7, year=2024),  500000,  'e', 'm'],
 
-  [datetime(day=22, month=7, year=2024),  86370,   'i', ' '],
+  [datetime(day= 2, month=8, year=2024),  96358,   'i', ' '],
 
 ]
  

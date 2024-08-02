@@ -760,7 +760,7 @@ class hard_function:
         plt.xticks(rotation=0)
         plt.show()
     
-    def findDDayThatIsFirstLunarDay():
+    def find_anni_date_that_is_first_of_lunar_month():
         # yearFrom = int(input('From Which Year? (number/0)\n'))
         yearLimit = int(input('To Which Year? (number/0)\n'))
         now=datetime.now()
@@ -779,3 +779,21 @@ class hard_function:
                 print(day)
         except Exception as e:
             logger.error(e)
+    
+    def find_dob_that_lunar_month_is_not_7():
+        day=int(input("Day: "))
+        month=int(input("Month: "))
+        year=int(input("Year: "))
+        to_which_year=int(input("To which year: "))
+        sol=Solar(year, month, day)
+        day_list=[]
+        print()
+        while (to_which_year!=sol.year):
+            lunar_day=Converter.Solar2Lunar(sol)
+            if (lunar_day.month != 7):
+                solar_day = datetime(sol.year, sol.month, sol.day)
+                lunar_str =f'{str(lunar_day.day).zfill(2)}/{str(lunar_day.month).zfill(2)}/{str(lunar_day.year%1000).zfill(2)}'
+                day_str =f'{solar_day.strftime("%d/%m/%Y")} ({lunar_str})'
+                print(day_str)
+                day_list.append(day_str)
+            sol=Solar(sol.year+1, month, day)
