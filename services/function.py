@@ -5,6 +5,8 @@ import pandas as pd
 import statistics as s
 import matplotlib.pyplot as plt
 
+from prettytable import PrettyTable
+
 from colorama import Fore
 from utils import col_txt, logger
 from collections import Counter
@@ -12,7 +14,7 @@ from datetime import datetime, timedelta
 from sklearn.preprocessing import MinMaxScaler
 from dateutil.relativedelta import relativedelta
 from lunarcalendar import Converter, Solar, Lunar, DateNotExist
-from data import im_date, ped, course, t_data, e_data, pred_ped, remains, save_goal
+from data import im_date, ped, course, t_data, e_data, pred_ped, remains, save_goal, tkb, period
 
 def sol_to_lu_date(date: datetime):
     solar=Solar(date.year, date.month, date.day)
@@ -28,7 +30,7 @@ def sol_to_lu_dates(list_date: list[datetime]):
         print(f'{solar.day}/{solar.month}/{solar.year} -> ' + lunar_log)
     print('===')
 
-def get_total(source = 't'or 'e' or 'i' or None, is_q: bool = False):
+def get_total(source = 't'or 'e' or 'i' or 's' or None, is_q: bool = False):
     if source!=None:
         if is_q:
             return sum([m[1] for m in remains if m[2] == source if m[3]!='p'])
@@ -39,6 +41,9 @@ def get_total(source = 't'or 'e' or 'i' or None, is_q: bool = False):
             return sum([m[1] for m in remains if m[3]!='p'])
         else:
             return sum([m[1] for m in remains])
+        
+def get_positive_total():
+    return sum([m[1] for m in remains if m[2] != 's' ])
 
 def get_crochet_total():
     return sum([m[1] for m in remains if m[2] == 'e' and m[3] == 'p'])
@@ -619,45 +624,72 @@ class soft_function:
             lu=Converter.Solar2Lunar(sol)
             print(f'{lu.day}/{lu.month}/{lu.year}')
 
+def cal_pecent(item, total):
+    return round(item*100/total, 2)
 
 class hard_function:
     
     def source_summary():
         # is_chart=False if input("Skip Chart? (y=1)\n")=='1' else True
         is_chart=False
-        total=get_total(None)
+        remain=get_total(None)
+        total=get_positive_total()
         con_t=get_total('t', True)
         con_e=get_total('e', True)
         con_i=get_total('i')
+        con_s=get_total('s')
         con_c=get_crochet_total()
         con_t_p=remains[0][1]
 
-        per_t = round(con_t*100/total, 2)
-        per_con_t_p = round(con_t_p*100/total, 2)
+        per_t = cal_pecent(con_t, total)
+        per_con_t_p = cal_pecent(con_t_p, total)
+        per_e = cal_pecent(con_e, total)
+        per_c = cal_pecent(con_c, total)
+        per_i = cal_pecent(con_i, total)
+        per_s = cal_pecent(con_s, total)
+        per_total = sum([per_t, per_con_t_p, per_e, per_c, per_i, per_s])
+        
+        table = PrettyTable()
+        table.field_names = ["Category", "Value", "Percent"]
+        table.align["Percent"] = "r"
+        table.align["Category"] = "l"
+        table.align["Value"] = "r"
 
-        per_e = round(con_e*100/total, 2)
-        per_c = round(con_c*100/total, 2)
-
-        per_i = round(con_i*100/total, 2)
-
-        print(f'QuyDen:\t{con_t_p:>12,} '+ col_txt(Fore.BLACK, f'({per_con_t_p}%)'))
-        print(f'DanLen:\t{con_c:>12,} ' + col_txt(Fore.BLACK, f'({per_c}%)'))
-        print('---')
-        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK, f'({per_t}%)'))
-        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
-        print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
-        print(f'====\nTong: \t{total:>12,}')
-        print(col_txt(Fore.BLACK, f'====\nTong: \t{total}'))
-        print('\n---')
-
+        data = [
+            {"Category": "QuyDen", "Value": f"{con_t_p:>12,}", "Percent": f"{per_con_t_p:.2f}"},
+            {"Category": "DanLen", "Value": f"{con_c:>12,}", "Percent": f"{per_c:.2f}"},
+            {"Category": "A", "Value": f"{con_t:>12,}", "Percent": f"{per_t:.2f}"},
+            {"Category": "E", "Value": f"{con_e:>12,}", "Percent": f"{per_e:.2f}"},
+            {"Category": "Lai", "Value": f"{con_i:>12,}", "Percent": f"{per_i:.2f}"},
+            {"Category": "Chi tieu", "Value": f"{con_s:>12,}", "Percent": f"{per_s:.2f}"},
+            {"Category": "----------", "Value": "--------------", "Percent": "------------"},
+            {"Category": "So du", "Value": f"{remain:>12,}", "Percent": f"{per_total:.2f}"},
+        ]
+        
+        for entry in data:
+            table.add_row([entry["Category"], entry["Value"], entry["Percent"]])
+            
+        print('\n                     *                      \n')
+        print(table)
+        print(remain)
+        
+        table.clear_rows()
+        print('\n                     *                      \n')
+        
         con_t=con_t_p+con_t
         con_e=con_e+con_c
         per_t=round(con_t*100/total, 2)
         per_e = round(con_e*100/total, 2)
+        
+        table.add_row(["A", f"{con_t:>12,}", f"{per_t:.2f}"])
+        table.add_row(["E", f"{con_e:>12,}", f"{per_e:.2f}"])
+        table.add_row(["Lai", f"{con_i:>12,}", f"{per_i:.2f}"])
+        table.add_row(["Chi tieu", f"{con_s:>12,}", f"{per_s:.2f}"])
+        
+        table.add_row(["--------", "------------", "----------"])
+        table.add_row(["So du", f"{remain:>12,}", f"{per_total:.2f}"])
 
-        print(f'A: \t{con_t:>12,} ' + col_txt(Fore.BLACK, f'({per_t}%)'))
-        print(f'E: \t{con_e:>12,} ' + col_txt(Fore.BLACK, f'({per_e}%)'))
-        print(f'Lai: \t{con_i:>12,} ' + col_txt(Fore.BLACK, f'({per_i}%)'))
+        print(table)
 
         if is_chart:
             labels=[f'T', f'E', f'I']
@@ -790,10 +822,71 @@ class hard_function:
         print()
         while (to_which_year!=sol.year):
             lunar_day=Converter.Solar2Lunar(sol)
-            if (lunar_day.month != 7):
+            if (lunar_day.month == 7 and lunar_day.day == 1):
                 solar_day = datetime(sol.year, sol.month, sol.day)
                 lunar_str =f'{str(lunar_day.day).zfill(2)}/{str(lunar_day.month).zfill(2)}/{str(lunar_day.year%1000).zfill(2)}'
                 day_str =f'{solar_day.strftime("%d/%m/%Y")} ({lunar_str})'
                 print(day_str)
                 day_list.append(day_str)
             sol=Solar(sol.year+1, month, day)
+    
+    def time_table():
+        subject, current_date = get_current_subject(tkb)
+        color = current_day_color =Fore.LIGHTWHITE_EX
+        
+        table = PrettyTable()
+        table.field_names = ["STT", "Day", "From", "To", "Hour", "Room", "Subject Name", "Class Code"]
+        tkb_sorted = sorted(tkb, key=lambda x: (x['day'], x['ped_from']))
+        first_date=f"T{tkb_sorted[0]['day']}"
+        stt=1
+        for entry in tkb_sorted:
+            p_from = entry['ped_from']
+            p_to = entry['ped_to']
+            date = f"T{entry['day']}"
+            if (date!=first_date):
+                table.add_row(['---','---', '----', '--', '-----', '-------', '-----------------------------------------------------------------------', '------------'])
+                first_date=date
+            if (entry['day']== current_date):
+                current_day_color=Fore.LIGHTGREEN_EX
+            if (entry['name']== subject):
+                color=Fore.LIGHTGREEN_EX
+            table.add_row([stt, col_txt(current_day_color, date), p_from, p_to , col_txt(color, period_to_hour(p_from, p_to)), col_txt(color, entry['room']), col_txt(color, entry['name']), entry['class_code']])
+            stt+=1
+            color=current_day_color=Fore.LIGHTWHITE_EX
+            
+        table.align = "l"
+        table.align["STT"] = "c"
+
+        print(table)
+        
+        is_continue=True
+        while is_continue:
+            chosing=(input('STT: (?/) '))
+            if chosing=='':
+                break
+            chosing=int(chosing)
+            find_subject(chosing, tkb_sorted)
+        
+def period_to_hour(p_from, p_to):
+    return f"{period[p_from][0]}-{period[p_to][-1]}"
+
+def get_current_subject(tkb):
+    now = datetime.now()
+    current_day = now.isoweekday() + 1
+    current_hour = int(now.strftime('%H'))
+
+    for entry in tkb:
+        hour_from = period[entry['ped_from']][0]
+        hour_to = period[entry['ped_to']][-1]
+        if entry['day'] == current_day and hour_from <= current_hour <= hour_to:
+            return entry['name'], entry['day']
+        if entry['day'] == current_day:
+            return '', current_day
+    return '', 0
+
+def find_subject(id, tkb_sort):
+    info= tkb_sort[id-1]
+    name=info['name']
+    class_code=info['class_code']
+    value=info['value']
+    print(f"[{class_code}]: {name} - {value} tín.\n")

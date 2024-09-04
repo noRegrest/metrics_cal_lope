@@ -99,6 +99,10 @@ while is_continue:
     # ? to NH
     elif chosen == '13':
         hf.find_dob_that_lunar_month_is_not_7()
+ 
+    # ? test
+    elif chosen == '111':
+        hf.time_table()
         
     # ? Stop
     else:
