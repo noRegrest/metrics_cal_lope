@@ -126,7 +126,7 @@ course=[
   datetime(day=1, month=9, year=2024),
 ]
 # course
-# 25
+# 26
 
 pred_ped=datetime(day=20, month=9, year=2024)
 # pred
@@ -167,6 +167,9 @@ remains=[
 # Hạ long 31-2/9
   [datetime(day=27, month=8, year=2024),-5000000, 's', 'travel'],
  
+  [datetime(day= 4, month=9, year=2024),  500000, 't', 'm'],
+  [datetime(day= 4, month=9, year=2024),  500000, 'e', 'm'],
+  
   [datetime(day=27, month=8, year=2024),  122293, 'i', ' '],
 
 ]
